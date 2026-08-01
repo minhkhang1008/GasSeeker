@@ -1,0 +1,3 @@
+# Cai bang:  python3 -m pip install -r tools/requirements.txt
+pyserial>=3.5      # receiver.py doc cong USB
+matplotlib>=3.7    # analyze.py ve bieu do

@@ -1,0 +1,18 @@
+# PlatformIO
+.pio/
+.vscode/
+compile_commands.json
+
+# Ket qua sinh ra tu cong cu (chay lai la co)
+data/sim/*.csv
+data/figures/
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# GHI CHU: data/runs/ ĐƯỢC theo doi trong git - do la so lieu do thuc te,
+# mat la khong lam lai duoc.
