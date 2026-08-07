@@ -19,11 +19,6 @@ Nếu đổi GPIO thì sửa `config.h` trước, sau đó cập nhật lại t�
 - LM2596: hạ xuống 5,0 V cho ESP32 + MQ-3
 - Cầu chì 5 A + công tắc KCD1
 
-> **Kiến trúc định vị:** MPU6050 đảm nhiệm heading/góc quay và giữ hướng;
-> encoder HC-020K duy nhất dùng để đo quãng đường. Firmware gốc đang giả định
-> 2 encoder nên phần odometry/selftest vẫn phải được chỉnh cho cấu hình 1 encoder.
-> Không được để firmware coi GPIO2 là encoder phải khi chân này thực tế để trống.
-
 ---
 
 ## Chân KHÔNG được dùng trên ESP32-S3
