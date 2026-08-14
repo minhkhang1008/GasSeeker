@@ -51,8 +51,16 @@ static void banner() {
   Serial.println("=====================================================");
   Serial.printf("  San      : %.0f x %.0f cm, o luoi %.0f cm (%d x %d)\n",
                 cfg::ARENA_W_CM, cfg::ARENA_H_CM, cfg::CELL_CM, cfg::GRID_NX, cfg::GRID_NY);
-  Serial.printf("  MPU6050  : %s\n", hw::imuOk() ? "OK (dung gyro cho huong)"
-                                                 : "KHONG THAY -> dung hieu so encoder");
+  Serial.printf("  Cau hinh : %d encoder, %d cong tac va cham\n", cfg::ENCODER_COUNT,
+                cfg::BUMPER_COUNT);
+  if (hw::imuOk()) {
+    Serial.println("  MPU6050  : OK (dung gyro cho huong)");
+  } else if (cfg::IMU_REQUIRED) {
+    Serial.println("  MPU6050  : *** KHONG THAY - VOI 1 ENCODER THI KHONG THE ***");
+    Serial.println("             *** BIET HUONG. PHAI SUA TRUOC KHI CHAY.      ***");
+  } else {
+    Serial.println("  MPU6050  : KHONG THAY -> tam dung hieu so hai encoder");
+  }
   Serial.printf("  LoRa     : %s (%s)\n", radiolink::ok() ? "OK" : "KHONG DUNG DUOC",
                 radiolink::lastError());
   Serial.printf("  Thuat toan: %s\n", gs::algoName(algo_));
@@ -77,6 +85,11 @@ static void printInfo() {
 static void startRun() {
   if (bench::active()) {
     Serial.println("!! Dang o che do kiem tra. Go 'bench off' truoc.");
+    return;
+  }
+  if (cfg::IMU_REQUIRED && !hw::imuOk()) {
+    Serial.println("!! Khong co MPU6050 va chi co 1 encoder -> khong xac dinh duoc huong.");
+    Serial.println("   Sua ket noi I2C roi khoi dong lai. (Xem docs/wiring/sensors.md)");
     return;
   }
   if (!io.baselineReady()) {

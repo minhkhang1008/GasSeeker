@@ -16,7 +16,7 @@ static uint32_t beep_next_ms_ = 0;
 
 void ioBegin() {
   pinMode(cfg::pin::BUMP_L, INPUT_PULLUP);
-  pinMode(cfg::pin::BUMP_R, INPUT_PULLUP);
+  if (cfg::BUMPER_COUNT >= 2) pinMode(cfg::pin::BUMP_R, INPUT_PULLUP);
   pinMode(cfg::pin::BTN, INPUT_PULLUP);
   pinMode(cfg::pin::BUZZER, OUTPUT);
   digitalWrite(cfg::pin::BUZZER, LOW);
@@ -30,7 +30,10 @@ void ioBegin() {
 
 // Cong tac thuong mo, noi GND -> cham = LOW.
 bool bumperLeft() { return digitalRead(cfg::pin::BUMP_L) == LOW; }
-bool bumperRight() { return digitalRead(cfg::pin::BUMP_R) == LOW; }
+bool bumperRight() {
+  if (cfg::BUMPER_COUNT < 2) return false;  // khong lap -> khong doc chan tha noi
+  return digitalRead(cfg::pin::BUMP_R) == LOW;
+}
 bool bumperAny() { return bumperLeft() || bumperRight(); }
 
 void ioUpdate() {

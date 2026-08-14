@@ -1,7 +1,8 @@
 // ============================================================================
 //  odometry.h - dinh vi bang dead reckoning (de cuong muc 11.3).
 //
-//  Quang duong : encoder quang mot kenh tren moi banh.
+//  Quang duong : encoder quang mot kenh. Cau hinh hien tai chi co MOT encoder
+//                (banh sau trai) -> cfg::ENCODER_COUNT = 1.
 //                Encoder mot kenh KHONG biet chieu quay -> chieu duoc suy ra
 //                tu lenh dang cap cho motor (odomSetWheelDir).
 //  Huong       : tich phan gyro Z cua MPU6050 (chinh xac hon nhieu so voi
@@ -34,5 +35,6 @@ float odomSegmentTurnDeg();  // goc da quay (co dau)
 
 long odomTicksL();
 long odomTicksR();
+bool odomHasRightEncoder();
 
 }  // namespace hw

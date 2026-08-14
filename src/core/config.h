@@ -64,11 +64,27 @@ constexpr float SUCCESS_RADIUS_CM = 30.0f;  // [CHON]
 constexpr uint32_t MISSION_TIMEOUT_MS = GS_MISSION_TIMEOUT_S * 1000UL;  // [CHON] 8 phut
 
 // ---------------------------------------------------------------------------
-// 2. HINH HOC XE
+// 2. HINH HOC XE  -  PHAI KHOP VOI PHAN CUNG THAT (xem docs/wiring/)
+//
+// Cau hinh thuc te dang lap:
+//   - 4 motor vang V1, hai TB6612 dung CHUNG day dieu khien
+//     (ben trai: GPIO5/6/7 cho ca FL va RL; ben phai: GPIO15/16/17 cho FR va RR)
+//     -> ve mat dieu khien van la xe VI SAI hai ben, firmware khong doi.
+//   - CHI MOT encoder HC-020K, lap o banh sau trai, tren GPIO1.
+//   - CHI MOT cong tac va cham V156 o phia truoc, tren GPIO38.
 // ---------------------------------------------------------------------------
-constexpr float WHEEL_DIAMETER_MM = 65.0f;   // [DO] banh TT tieu chuan
-constexpr float WHEEL_BASE_MM     = 130.0f;  // [DO] khoang cach 2 banh dan dong
-constexpr int   ENCODER_SLOTS     = 20;      // [DO] so khe tren dia encoder
+constexpr float WHEEL_DIAMETER_MM = 65.0f;   // [DO] banh V1
+constexpr float WHEEL_BASE_MM     = 130.0f;  // [DO] khoang cach hai BEN banh
+constexpr int   ENCODER_SLOTS     = 20;      // [DO] DEM so khe tren dia that
+
+// So encoder va so cong tac va cham THUC TE co tren xe.
+// Dat = 1 la cau hinh hien tai. Neu sau nay lap them thi doi thanh 2.
+constexpr int ENCODER_COUNT = 1;  // [CHOT theo phan cung] encoder o BEN TRAI
+constexpr int BUMPER_COUNT  = 1;  // [CHOT theo phan cung] cong tac o GPIO38
+
+// Voi ENCODER_COUNT == 1, robot KHONG suy duoc goc quay tu encoder ->
+// MPU6050 tro thanh BAT BUOC. Firmware se canh bao that to neu thieu.
+constexpr bool IMU_REQUIRED = (ENCODER_COUNT < 2);
 
 // Quang duong mot xung encoder (mot kenh, dem canh len).
 constexpr float MM_PER_TICK = 3.14159265f * WHEEL_DIAMETER_MM / ENCODER_SLOTS;
@@ -277,13 +293,13 @@ constexpr int MOT_R_PWM = 15;  // PWMB
 constexpr int MOT_R_IN1 = 16;  // BIN1
 constexpr int MOT_R_IN2 = 17;  // BIN2
 
-// --- Encoder quang (1 kenh moi banh) ---
+// --- Encoder quang HC-020K (1 kenh). Chi ENC_L duoc dung khi ENCODER_COUNT = 1.
 constexpr int ENC_L = 1;
-constexpr int ENC_R = 2;
+constexpr int ENC_R = 2;  // KHONG NOI trong cau hinh hien tai
 
 // --- Cong tac va cham (INPUT_PULLUP, cham = LOW) ---
 constexpr int BUMP_L = 38;
-constexpr int BUMP_R = 39;
+constexpr int BUMP_R = 39;  // KHONG NOI trong cau hinh hien tai
 
 // --- Giao dien nguoi dung ---
 // Nut BOOT co san tren board: nhan ngan = START/STOP, nhan giu = doi thuat toan.

@@ -42,9 +42,11 @@ static constexpr float WHEEL_BASE_CM = cfg::WHEEL_BASE_MM / 10.0f;
 
 void odomBegin() {
   pinMode(cfg::pin::ENC_L, INPUT_PULLUP);
-  pinMode(cfg::pin::ENC_R, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(cfg::pin::ENC_L), isrL, RISING);
-  attachInterrupt(digitalPinToInterrupt(cfg::pin::ENC_R), isrR, RISING);
+  if (cfg::ENCODER_COUNT >= 2) {
+    pinMode(cfg::pin::ENC_R, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(cfg::pin::ENC_R), isrR, RISING);
+  }
 
   use_gyro_ = imuOk();
   last_update_us_ = micros();
@@ -88,17 +90,35 @@ void odomUpdate() {
   prev_l_ = tl;
   prev_r_ = tr;
 
-  // Chieu quay suy ra tu lenh dang cap cho motor.
+  // Chieu quay suy ra tu lenh dang cap cho motor (encoder mot kenh khong biet chieu).
   const float dl = dl_ticks * cfg::CM_PER_TICK * (float)dir_l_;
   const float dr = dr_ticks * cfg::CM_PER_TICK * (float)dir_r_;
-  const float d = 0.5f * (dl + dr);
+
+  // --- quang duong tinh tien ---
+  // QUAY TAI CHO (hai ben cap chieu nguoc nhau) khong lam xe tinh tien, du
+  // banh van quay va encoder van dem. Voi cau hinh MOT encoder, neu khong chan
+  // truong hop nay thi moi lan quay robot se tuong minh vua di lui mot doan.
+  float d;
+  if (dir_l_ == 0 && dir_r_ == 0) {
+    d = 0.0f;
+  } else if (dir_l_ != dir_r_) {
+    d = 0.0f;  // quay tai cho
+  } else if (cfg::ENCODER_COUNT >= 2) {
+    d = 0.5f * (dl + dr);
+  } else {
+    d = dl;  // chi co encoder ben trai
+  }
 
   // --- huong ---
   float dtheta;
   if (use_gyro_) {
     dtheta = imuGyroZ() * dt;
-  } else {
+  } else if (cfg::ENCODER_COUNT >= 2) {
     dtheta = gs::rad2deg((dr - dl) / WHEEL_BASE_CM);
+  } else {
+    // Mot encoder + khong co gyro -> khong the biet huong. Giu nguyen va de
+    // phan canh bao o main.cpp bao cho nguoi dung.
+    dtheta = 0.0f;
   }
   heading_deg_ = gs::wrapDeg(heading_deg_ + dtheta);
   seg_turn_deg_ += dtheta;
@@ -130,5 +150,6 @@ float odomSegmentTurnDeg() { return seg_turn_deg_; }
 
 long odomTicksL() { return (long)tick_l_; }
 long odomTicksR() { return (long)tick_r_; }
+bool odomHasRightEncoder() { return cfg::ENCODER_COUNT >= 2; }
 
 }  // namespace hw

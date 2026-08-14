@@ -82,11 +82,16 @@ static void reportMotion() {
   if (mode_ == Mode::DRIVE) {
     const float got = hw::odomSegmentCm();
     Serial.printf("[bench] xong. Odometry bao %.1f cm (yeu cau %.1f).\n", got, want_);
-    Serial.printf("        xung L=%ld R=%ld  (lech %ld xung)\n", dl, dr, dl - dr);
+    Serial.printf("        xung L=%ld R=%ld\n", dl, dr);
     Serial.println("        DO BANG THUOC quang duong that, roi sua config.h:");
     Serial.printf("        WHEEL_DIAMETER_MM_moi = %.1f * (do_duoc_cm / %.1f)\n",
                   cfg::WHEEL_DIAMETER_MM, got > 0.1f ? got : 1.0f);
-    if (dl > 0 && dr > 0) {
+    if (!hw::odomHasRightEncoder()) {
+      if (dl < 3)
+        Serial.println("        !! encoder khong ra xung nao - kiem tra HC-020K tren GPIO1");
+      else
+        Serial.println("        (cau hinh mot encoder: quang duong lay tu banh sau TRAI)");
+    } else if (dl > 0 && dr > 0) {
       const float ratio = (float)dl / (float)dr;
       if (ratio < 0.9f || ratio > 1.1f)
         Serial.printf("        !! hai banh lech %.0f%% - kiem tra encoder hoac ma sat\n",
@@ -277,10 +282,10 @@ static bool selftestStep(uint32_t elapsed) {
       {
         const long dl = hw::odomTicksL() - st_tick0_l_;
         const long dr = hw::odomTicksR() - st_tick0_r_;
-        snprintf(msg, sizeof(msg), "banh trai quay, %ld xung (phai: %ld)", dl, dr);
+        snprintf(msg, sizeof(msg), "banh trai quay, %ld xung", dl);
         if (dl < 3)
           stResult("Motor + encoder TRAI", 2, "khong co xung - motor khong quay hoac encoder hong");
-        else if (dr > 2)
+        else if (hw::odomHasRightEncoder() && dr > 2)
           stResult("Motor + encoder TRAI", 1, "banh PHAI cung co xung - hai encoder dau lan nhau?");
         else
           stResult("Motor + encoder TRAI", 0, msg);
@@ -300,13 +305,20 @@ static bool selftestStep(uint32_t elapsed) {
       {
         const long dl = hw::odomTicksL() - st_tick0_l_;
         const long dr = hw::odomTicksR() - st_tick0_r_;
-        snprintf(msg, sizeof(msg), "banh phai quay, %ld xung (trai: %ld)", dr, dl);
-        if (dr < 3)
+        if (!hw::odomHasRightEncoder()) {
+          // Cau hinh mot encoder: khong do duoc ben phai, phai xac nhan bang mat.
+          snprintf(msg, sizeof(msg), "da cap dien 0,8 s - HAY NHIN xem 2 banh phai co quay khong");
+          stResult("Motor PHAI (khong encoder)", 0, msg);
+          if (dl > 2)
+            stResult("Canh bao day", 1, "chay motor PHAI ma encoder TRAI co xung - dau nham ben?");
+        } else if (dr < 3) {
           stResult("Motor + encoder PHAI", 2, "khong co xung - motor khong quay hoac encoder hong");
-        else if (dl > 2)
+        } else if (dl > 2) {
           stResult("Motor + encoder PHAI", 1, "banh TRAI cung co xung - hai encoder dau lan nhau?");
-        else
+        } else {
+          snprintf(msg, sizeof(msg), "banh phai quay, %ld xung", dr);
           stResult("Motor + encoder PHAI", 0, msg);
+        }
       }
       return true;
 

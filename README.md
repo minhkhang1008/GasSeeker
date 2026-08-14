@@ -46,6 +46,7 @@ lẫn máy tính**, nhờ tách qua giao diện `gs::IRobot`. Không có bản m
 
 | File | Nội dung |
 |---|---|
+| [docs/wiring/](docs/wiring/) | Sơ đồ đấu nối theo từng cụm (dùng khi ráp xe) |
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | **Hướng dẫn 10 giai đoạn: từ đống linh kiện tới bảng số liệu. Đọc trước tiên.** |
 | [docs/WIRING.md](docs/WIRING.md) | Sơ đồ chân, đấu nối, checklist trước khi cấp điện |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Mọi lựa chọn tự chốt, kèm lý do và cách đổi lại |

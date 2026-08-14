@@ -215,6 +215,51 @@ Bối cảnh: người dùng đã có đủ linh kiện, xin hướng dẫn đ�
 
 ---
 
+### Phiên 4 — 2026-08-14
+
+Bối cảnh: người dùng đang lắp xe, yêu cầu dò lại repo GitHub (đã có commit mới) và
+soạn nội dung báo cáo giữa kỳ.
+
+**Phát hiện quan trọng — phần cứng thật KHÁC thiết kế ban đầu**
+
+Kéo `origin/main` về thấy thư mục `docs/wiring/` mới (sơ đồ Mermaid theo từng cụm).
+Đọc kỹ thì cấu hình thật là:
+
+| | Firmware giả định | Phần cứng thật |
+|---|---|---|
+| Motor | 2 motor, 1 TB6612 | **4 motor, 2 TB6612 dùng chung dây điều khiển** |
+| Encoder | 2 (GPIO1 + GPIO2) | **1 (HC-020K, GPIO1, bánh sau trái)** |
+| Bumper | 2 (GPIO38 + 39) | **1 (V156, GPIO38)** |
+
+Phần motor không ảnh hưởng firmware (hai driver song song cùng tín hiệu → vẫn là xe
+vi sai hai bên). Nhưng **một encoder** gây hai lỗi nếu để nguyên:
+1. `d = 0.5*(dl+dr)` với `dr` luôn bằng 0 → **quãng đường bị chia đôi**.
+2. Khi quay tại chỗ, bánh trái vẫn quay → robot **tưởng mình vừa đi lùi** một đoạn.
+
+**Đã sửa**
+- `config.h`: thêm `ENCODER_COUNT` / `BUMPER_COUNT` / `IMU_REQUIRED` (=1/1/true).
+- `odometry.cpp`: chỉ gắn ngắt cho encoder có thật; quãng đường lấy trực tiếp từ
+  encoder trái; **`dir_l_ != dir_r_` (quay tại chỗ) → `d = 0`** — sửa đúng lỗi 2 ở trên,
+  và cách sửa này đúng cho cả cấu hình 1 lẫn 2 encoder.
+- `hw_io.cpp`: không đọc chân bumper phải khi không lắp.
+- `bench.cpp`: `selftest` và báo cáo `drive` thích ứng với cấu hình một encoder;
+  bước kiểm tra motor phải chuyển thành "xác nhận bằng mắt".
+- `main.cpp`: MPU6050 thành **bắt buộc** (một encoder thì không suy được góc);
+  chặn `start` và in cảnh báo lớn nếu thiếu.
+- Cho phép ghi đè kích thước sân bằng `-D` lúc build.
+
+**Đã soạn** `docs/BAO_CAO_GIUA_KY.md` — nội dung báo cáo giữa kỳ đầy đủ: giới thiệu,
+lý do, vấn đề giải quyết, sơ đồ khối, sơ đồ nguồn, ba giải thuật (Mermaid), tiến độ,
+hạn chế, hướng phát triển. Hình minh hoạ copy vào `docs/img/` (đã bỏ khỏi `.gitignore`).
+
+**Ghi chú cho phiên sau**
+- Nếu sau này lắp thêm encoder thứ hai: chỉ cần đổi `ENCODER_COUNT = 2`, mọi chỗ khác
+  tự thích ứng.
+- Vì chỉ có encoder bên TRÁI, nếu bánh trái trượt thì quãng đường sai hệ thống. Lúc
+  hiệu chuẩn `drive 100` nhớ chạy trên đúng mặt sàn sẽ dùng khi đo thật.
+
+---
+
 ## 7. Quy ước làm việc với người dùng
 
 1. Bất cứ giá trị/hướng nào Claude **tự chọn** đều phải ghi vào `docs/DECISIONS.md`

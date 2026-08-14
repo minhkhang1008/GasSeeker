@@ -7,6 +7,8 @@ compile_commands.json
 data/sim/*.csv
 data/figures/
 
+# docs/img/ ĐƯỢC theo doi: hinh dung trong bao cao, phai hien tren GitHub
+
 # Python
 __pycache__/
 *.pyc
