@@ -1,0 +1,24 @@
+\needspace{6\baselineskip}\noindent \textbf{C.1. Ba nguyên tắc an toàn bắt buộc}
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=0.15em,topsep=0.3em]
+  \item \textbf{Không cấp 5 V cho module LoRa.} Chỉ 3,3 V.
+  \item \textbf{Không cấp nguồn cho module LoRa khi chưa gắn ăng-ten.} Việc này có thể phá hỏng tầng khuếch đại công suất.
+  \item \textbf{Đo điện áp đầu ra của cả hai mạch hạ áp trước khi nối vào bất kỳ board nào.} XL4015 phải cho 6,00 $\pm$ 0,1 V; LM2596 phải cho 5,00 $\pm$ 0,1 V.
+\end{enumerate}
+\needspace{6\baselineskip}\noindent \textbf{C.2. Trình tự kiểm tra sau khi đấu nối}
+
+Kê xe lên cao để bánh không chạm đất, nạp firmware, mở cổng nối tiếp. Trong lúc firmware đo độ trôi con quay lúc khởi động, \textbf{giữ xe đứng yên hoàn toàn}. Sau đó chạy lần lượt: lệnh tự kiểm tra tổng thể $\rightarrow$ kiểm tra công tắc va chạm $\rightarrow$ kiểm tra encoder $\rightarrow$ kiểm tra ADC của MQ-3 $\rightarrow$ chạy từng bên động cơ $\rightarrow$ thử đường truyền LoRa.
+
+Chỉ khi mọi khối đã hoạt động đúng mới đặt xe xuống sàn để hiệu chuẩn theo thứ tự: quãng đường encoder $\rightarrow$ độ trôi con quay $\rightarrow$ lệnh đi thẳng 100 cm $\rightarrow$ lệnh quay 360$^\circ$ $\rightarrow$ đo độ lệch khi đi thẳng $\rightarrow$ hiệu chuẩn MQ-3 $\rightarrow$ chạy thuật toán tự hành.
+
+\needspace{6\baselineskip}\noindent \textbf{C.3. Quy trình một buổi thí nghiệm}
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=0.15em,topsep=0.3em]
+  \item Bật nguồn và \textbf{để cảm biến MQ-3 sấy nóng ít nhất 5 phút} trước khi tin vào số liệu.
+  \item Đặt xe ở góc xuất phát, giữ yên trong lúc firmware đo giá trị nền và độ trôi con quay.
+  \item Đặt nguồn phát (đĩa cồn) tại vị trí đã chọn; với thí nghiệm có gió, bật quạt và để dòng khí ổn định vài chục giây.
+  \item Chọn thuật toán bằng nút trên board, rồi nhấn để bắt đầu.
+  \item Theo dõi từ trạm mặt đất; chương trình trên máy tính ghi log thành tệp CSV kèm nhãn thuật toán, môi trường và số thứ tự lần chạy.
+  \item Sau khi robot kết luận, đo khoảng cách thật từ đầu dò tới nguồn và ghi vào tệp dữ liệu đi kèm.
+  \item Trước khi chạy lần tiếp theo, \textbf{tắt quạt, thông gió phòng và chờ giá trị nền trở về mức cũ} --- nếu không, giá trị nền của lần chạy sau sẽ bị nâng lên bởi lượng khí còn lại của lần chạy trước.
+\end{enumerate}

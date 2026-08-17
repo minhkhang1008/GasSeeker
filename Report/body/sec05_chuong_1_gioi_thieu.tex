@@ -1,0 +1,81 @@
+\subsection{Đặt vấn đề}
+Rò rỉ khí là một trong những sự cố phổ biến và nguy hiểm nhất trong công nghiệp. Khí dễ cháy như LPG hay metan có thể tích tụ tới ngưỡng nổ; khí độc như CO hay H$_{2}$S gây nguy hiểm cho tính mạng ở nồng độ rất thấp. Trong hầu hết các tình huống, ứng phó với sự cố rò rỉ đòi hỏi trả lời \textbf{hai câu hỏi hoàn toàn khác nhau}.
+
+Câu hỏi thứ nhất --- \textit{``có rò rỉ hay không''} --- đã được giải quyết tương đối tốt. Người ta gắn các cảm biến cố định lên tường hoặc trần, đặt ngưỡng, và khi nồng độ vượt ngưỡng thì hệ thống báo động. Cách làm này đơn giản, tin cậy và đã được chuẩn hoá.
+
+Câu hỏi thứ hai --- \textit{``rò rỉ ở chỗ nào''} --- thì khó hơn nhiều, và mạng cảm biến cố định gần như không trả lời được. Một cảm biến cố định chỉ nói được rằng ``khu vực này có khí''. Muốn tăng độ phân giải không gian thì phải tăng mật độ cảm biến, mà chi phí khi đó tăng theo \textbf{diện tích cần giám sát} chứ không theo số điểm rò rỉ. Đây là một quan hệ chi phí rất bất lợi.
+
+Trên thực tế, câu hỏi thứ hai hiện chủ yếu vẫn do con người giải: một nhân viên cầm máy dò cầm tay, đi vào khu vực nghi ngờ và dò dần theo nồng độ. Cách làm này chính xác, nhưng nó đòi hỏi \textbf{một con người có mặt trong vùng nguy hiểm, tại đúng thời điểm nguy hiểm nhất} --- khi nồng độ khí còn cao và nguồn rò rỉ chưa được cô lập.
+
+Đây chính là khoảng trống mà một robot tự hành mang cảm biến khí có thể lấp vào: robot làm đúng công việc mà người cầm máy dò đang làm, trong khi người vận hành đứng ngoài và theo dõi từ xa. Nhận xét này quyết định luôn kiến trúc của hệ thống trong đề tài: \textbf{không phải một chiếc xe, mà là một chiếc xe cộng với một trạm mặt đất}, nối với nhau bằng một đường truyền không dây tầm xa.
+
+Các tình huống ứng dụng cụ thể mà hướng này phục vụ gồm: rò rỉ LPG hoặc khí metan trong nhà máy và kho chứa; khí sinh ra tại bãi chôn lấp rác; và khảo sát không gian hạn chế --- hầm kỹ thuật, cống, bồn chứa --- trước khi cho người xuống.
+
+
+\subsection{Tổng quan tình hình nghiên cứu}
+Định vị nguồn phát khí bằng robot di động (\textit{gas source localisation}, GSL) là một hướng nghiên cứu đã có lịch sử vài chục năm và vẫn đang được tổng kết trong các bài tổng quan gần đây, chẳng hạn bài tổng quan của Francis và cộng sự trên \textit{Journal of Field Robotics} năm 2022 [5]. Các phương pháp trong tài liệu thường được xếp thành ba nhóm.
+
+Nhóm thứ nhất là \textbf{các phương pháp phản ứng dựa trên gradient nồng độ} (\textit{chemotaxis}): robot đo nồng độ tại nhiều điểm và di chuyển về phía nồng độ tăng. Đây là nhóm trực giác nhất và cũng là nhóm bị giới hạn nhiều nhất khi có gió.
+
+Nhóm thứ hai là \textbf{các phương pháp dựa trên hướng dòng chảy} (\textit{anemotaxis}), tiêu biểu là surge-casting mô phỏng hành vi định hướng theo mùi của bướm đêm: khi ngửi thấy khí thì tiến ngược hướng gió, khi mất tín hiệu thì quét ngang vuông góc hướng gió để bắt lại luồng.
+
+Nhóm thứ ba là \textbf{các phương pháp dựa trên thông tin} (\textit{infotaxis}, tìm kiếm dựa trên bản đồ xác suất): robot duy trì một phân bố xác suất về vị trí nguồn và chọn hành động làm giảm entropy của phân bố đó nhanh nhất. Nhóm này mạnh nhất về lý thuyết nhưng cũng đòi hỏi tài nguyên tính toán và mô hình môi trường phức tạp nhất.
+
+Điểm chung của phần lớn các so sánh đã công bố là \textbf{mỗi phương pháp thường được đánh giá trên một nền tảng phần cứng khác nhau}, với cảm biến khác nhau, tốc độ khác nhau và quy trình đo khác nhau. Điều đó khiến rất khó tách phần đóng góp của bản thân thuật toán ra khỏi phần đóng góp của phần cứng. Đây chính là khoảng trống mà đề tài này nhắm tới ở quy mô một đề tài học sinh: không phải phát minh thuật toán mới, mà là \textbf{so sánh có kiểm soát} ba thuật toán tiêu biểu trên cùng một nền tảng.
+
+
+\subsection{Mục tiêu đề tài}
+Đề tài đặt ra hai mục tiêu, một về sản phẩm và một về tri thức.
+
+\textbf{Mục tiêu sản phẩm.} Chế tạo một robot tự hành có khả năng tìm ra vị trí một nguồn phát khí trong một sân thử nghiệm phẳng, \textbf{chỉ sử dụng một cảm biến khí duy nhất}, kèm một trạm mặt đất nhận dữ liệu từ xa qua LoRa để người vận hành theo dõi được toàn bộ quá trình mà không phải đi vào vùng có khí.
+
+\textbf{Mục tiêu tri thức.} So sánh có kiểm soát ba thuật toán tìm nguồn --- quét toàn bộ, bám gradient và surge-casting --- trên cùng phần cứng đó, cùng quy trình đo đó và cùng tiêu chí chấm điểm đó, trong hai chế độ dòng khí khác nhau, để rút ra một \textbf{quy tắc chọn thuật toán theo điều kiện môi trường}.
+
+
+\subsection{Phạm vi và giới hạn tự đặt ra}
+Do thời gian và nguồn lực có hạn, nhóm chủ động khoanh phạm vi rất chặt ngay từ đầu. Bảng 1.1 liệt kê đầy đủ những gì đề tài làm và những gì đề tài \textbf{cố ý không làm}.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Phạm vi đề tài --- những gì làm và những gì cố ý không làm}
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.4644\textwidth}>{\raggedright\arraybackslash}p{0.4644\textwidth}}
+    \toprule
+    \textbf{Đề tài có làm} & \textbf{Đề tài cố ý KHÔNG làm} \\
+    \midrule
+    Sân phẳng 2 $\times$ 2 m, chia lưới ô 25 cm & Không lập bản đồ vật cản, không né vật cản; xe chỉ có phản ứng sau khi va chạm \\
+    Một nguồn phát khí duy nhất, dùng hơi cồn & Không xử lý bài toán nhiều nguồn phát đồng thời \\
+    Hai chế độ dòng khí: khuếch tán thuần và phát tán đứt quãng có quạt & Không tự đo hướng gió; hướng gió là điều kiện biên khai báo trước \\
+    Ba thuật toán tìm nguồn cài trên cùng một nền tảng & Không cài đặt nhóm thuật toán dựa trên thông tin (\textit{infotaxis}) \\
+    Truyền dữ liệu giám sát về trạm mặt đất qua LoRa & Không điều khiển tay từ xa như một thiết bị giải trí; LoRa chỉ để giám sát và dừng khẩn \\
+    Hiển thị nồng độ ước lượng và mức cảnh báo cho người vận hành & Không khẳng định độ chính xác tuyệt đối của giá trị nồng độ khi chưa hiệu chuẩn bằng khí chuẩn \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+Việc dùng \textbf{hơi cồn} làm khí thử là một lựa chọn có chủ ý. Thử nghiệm diễn ra trong phòng, nên chất bay hơi được chọn phải an toàn, không cháy nổ ở nồng độ thử, dễ tạo nguồn ổn định bằng một đĩa chứa nhỏ, và có cảm biến giá rẻ đọc được. Hơi cồn thoả cả bốn điều kiện. Về mặt thuật toán, việc đổi loại khí không làm thay đổi bài toán: thuật toán không quan tâm đó là khí gì, nó chỉ cần \textbf{một đại lượng vô hướng có xu hướng giảm khi ra xa nguồn}.
+
+
+\subsection{Ba giả thuyết nghiên cứu}
+Toàn bộ phần thực nghiệm của đề tài được thiết kế để kiểm chứng ba giả thuyết sau:
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=0.15em,topsep=0.3em]
+  \item \textbf{Giả thuyết H1.} Trong môi trường khuếch tán thuần, nơi trường nồng độ trơn và giảm đơn điệu theo khoảng cách, \textbf{bám gradient} là thuật toán định vị nhanh nhất trong ba thuật toán.
+  \item \textbf{Giả thuyết H2.} Trong môi trường phát tán đứt quãng có gió, nơi trường nồng độ bị xé thành các cụm rời rạc, \textbf{surge-casting} là thuật toán định vị hiệu quả nhất.
+  \item \textbf{Giả thuyết H3.} \textbf{Quét toàn bộ} luôn tìm được nguồn nhưng là thuật toán chậm nhất, và vì vậy đóng vai trò mốc so sánh (\textit{baseline}).
+\end{enumerate}
+Xin lưu ý trước: kết quả trình bày ở Chương 6 xác nhận H1 và H2, nhưng \textbf{bác bỏ một phần H3}. Nhóm giữ nguyên phát biểu ban đầu của H3 trong báo cáo và phân tích nguyên nhân của sự sai lệch, vì bản thân sự sai lệch đó là một kết quả có giá trị.
+
+
+\subsection{Đóng góp của đề tài}
+Nhóm không nhận là mình sáng tạo ra thuật toán mới. Cả ba thuật toán được cài đặt đều đã có trong tài liệu. Đóng góp của đề tài nằm ở bốn điểm sau:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=0.15em,topsep=0.3em]
+  \item \textbf{Một so sánh có kiểm soát.} Ba thuật toán chạy trên cùng một nền tảng phần cứng, cùng quy trình đo, cùng ràng buộc một cảm biến và cùng tiêu chí chấm điểm. Nhờ đó, chênh lệch quan sát được chỉ có thể quy cho bản thân thuật toán.
+  \item \textbf{Đưa ràng buộc ``một cảm biến'' thành điều kiện thiết kế.} Báo cáo trình bày lập luận vật lý cho thấy vì sao thêm cảm biến thứ hai trên cùng một chiếc xe \textbf{không} giải quyết được bài toán, và vì sao chính ràng buộc đó buộc robot phải khai thác thời gian và chuyển động.
+  \item \textbf{Kiến trúc dùng chung mã nguồn giữa firmware và mô phỏng.} Toàn bộ thuật toán nằm trong một lớp C++ độc lập phần cứng; đoạn mã chạy trong mô phỏng chính là đoạn mã sẽ nạp vào vi điều khiển, nên không tồn tại rủi ro ``bản mô phỏng khác bản thật''.
+  \item \textbf{Một quy trình đo được thiết kế quanh giới hạn vật lý của cảm biến rẻ tiền}, thay vì bỏ qua giới hạn đó.
+\end{itemize}
+
+\subsection{Bố cục báo cáo}
+\textbf{Chương 2} trình bày cơ sở lý thuyết: cấu trúc luồng khí trong dòng rối, nguyên lý cảm biến oxit kim loại, lập luận cho ràng buộc một cảm biến, và nguyên lý ba thuật toán. \textbf{Chương 3} trình bày thiết kế phần cứng. \textbf{Chương 4} trình bày thiết kế phần mềm và ba thuật toán ở mức cài đặt. \textbf{Chương 5} trình bày môi trường mô phỏng và thiết kế thí nghiệm. \textbf{Chương 6} trình bày kết quả, kiểm định thống kê và bàn luận. \textbf{Chương 7} kết luận, nêu hạn chế và hướng phát triển.

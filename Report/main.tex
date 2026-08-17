@@ -1,155 +1,284 @@
+% =============================================================================
+%  BÁO CÁO ĐỀ TÀI — GasSeeker
+%  Nhóm 14 · CLB Pay it Forward · PIFKID 2026
+%
+%  Biên dịch:  pdflatex main  (2 lần)   hoặc   xelatex main  (2 lần)
+%  Khuyến nghị: latexmk -xelatex main.tex     (tự chạy đủ số lần cho mục lục)
+%
+%  Cấu trúc format kế thừa từ mẫu báo cáo LaTeX; toàn bộ nội dung là của Nhóm 14.
+% =============================================================================
 \documentclass[a4paper,12pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T5]{fontenc}
-\usepackage[vietnamese]{babel}
-\usepackage{graphicx}
+
+% ----------------------------------------------------------------- font & mã
+% Preamble chạy được cả pdflatex lẫn xelatex/lualatex.
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T5]{fontenc}
+  \usepackage[vietnamese]{babel}
+  \usepackage{mathptmx}
+\else
+  \usepackage{fontspec}
+  \IfFontExistsTF{Times New Roman}
+    {\setmainfont{Times New Roman}}
+    {\setmainfont{Liberation Serif}}
+  \IfFontExistsTF{Courier New}
+    {\setmonofont{Courier New}[Scale=MatchLowercase]}
+    {\setmonofont{Liberation Mono}[Scale=MatchLowercase]}
+\fi
+
+% ----------------------------------------------------------------- gói dùng
 \usepackage{geometry}
-\usepackage{subcaption}
-\usepackage{siunitx}
-\usepackage{pgfplots}
-\usepackage{empheq}
+\usepackage{graphicx}
 \usepackage{float}
-\usepackage{xurl}
-\usepackage{mathptmx}
-\pgfplotsset{compat=1.18}
-\usetikzlibrary{intersections}
-\usepgfplotslibrary{fillbetween}
-\usepackage{tikz}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{indentfirst}
 \usepackage{xcolor}
 \usepackage[most]{tcolorbox}
-\usepackage{array}
-\usepackage{caption}
-\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
 \usepackage{tocloft}
-\usepackage{setspace}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{tabularx}
-\usepackage{indentfirst}
-\AtBeginDocument{
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{1.0em}
-}
-\numberwithin{equation}{subsection}
-
-% Thiết lập cho gói listings để tô màu cho mã MATLAB
-%\begin{lstlisting} để sử dụng
-\definecolor{titlegreen}{RGB}{34, 85, 34}      % Xanh đậm tiêu đề
-\definecolor{codebg}{RGB}{248, 248, 248}        % Nền code xám nhạt
-\definecolor{kw}{RGB}{0, 0, 255}                % Keyword: xanh dương
-\definecolor{cmt}{RGB}{34, 139, 34}             % Comment: xanh lá
-\definecolor{str}{RGB}{163, 21, 21}             % String: đỏ
-\definecolor{num}{RGB}{128, 0, 128}             % Number: tím
- 
-
-% ===== LỆNH TIỆN LỢI: \matlabcode{Tiêu đề}{code} =====
-% \lstnewenvironment{matlabcode}[1]{%
-%     \begin{matlabbox}{#1}
-%     \lstset{style=matlabStyle}
-% }{%
-%     \end{matlabbox}
-% }
-
-
-%Khung của câu hỏi, định nghĩa
-\newtcolorbox{bt}[1]{%
-  enhanced,
-  title={#1},
-	attach boxed title to top left={xshift=-4mm},boxrule=0pt,after skip=1cm,before skip=1cm,right skip=0cm,breakable,fonttitle=\bfseries,toprule=0pt,bottomrule=0pt,rightrule=0pt,leftrule=4pt,arc=0mm,skin=enhancedlast jigsaw,sharp corners,colframe=gree,colbacktitle=gre,boxed title style={
-		frame code={ 
-			\fill[gre](frame.south west)--(frame.north west)--(frame.north east)--([xshift=3mm]frame.east)--(frame.south east)--cycle;
-			\draw[line width=1mm,gre]([xshift=2mm]frame.north east)--([xshift=5mm]frame.east)--([xshift=2mm]frame.south east);
-			
-			\draw[line width=1mm,gre]([xshift=5mm]frame.north east)--([xshift=8mm]frame.east)--([xshift=5mm]frame.south east);
-			\fill[blue!85!black](frame.south west)--+(4mm,-2mm)--+(4mm,2mm)--cycle;
-		}
-	}
-}
-\definecolor{gre}{RGB}{0, 71, 171}   % xanh đậm
-\definecolor{gree}{RGB}{173, 216, 230} % xanh nhạt
-
-
-\setlength{\parindent}{2em}
-\setlength{\parskip}{0.5em}
-\renewcommand{\contentsname}{MỤC LỤC}
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\usepackage{titlesec}
+\usepackage{xurl}
+\usepackage{needspace}
+\usepackage{tikz}
 \usetikzlibrary{calc}
-\geometry{top=2.5cm,bottom=2.5cm,left=2cm,right=2cm}
-\addto\captionsvietnamese{\renewcommand{\refname}{Tài liệu tham khảo}}\setlength{\parindent}{2em}
+\usepackage[hidelinks]{hyperref}
 
-\begin{document}
-\begin{titlepage}
-   \input{Khung}
-\end{titlepage}
-\newpage
-\pagenumbering{gobble}
-% --- CẤU HÌNH HEADER CHUẨN MẪU 2 ---
-\setlength{\headheight}{1cm} % Tăng chiều cao header để chứa vừa logo
-\fancyheadoffset{2pt} 
+\geometry{top=2.5cm,bottom=2.5cm,left=2.5cm,right=2cm}
 
-\fancyhead[L]{\footnotesize%
-    \begin{tabular}{ @{} m{1.5cm} @{} m{12cm} } % Cột 1: Logo (rộng 1.5cm), Cột 2: Chữ (rộng 12cm)
-        % LOGO
-        \includegraphics[height=0.9cm]{pic/bk_name_vi.png} 
-        & 
-        % CHỮ BÊN CẠNH
-        % \text{Trường đại học Bách khoa - ĐHQG TPHCM}          % Dòng 2 thường
-    \end{tabular}
+% Cho phep hinh/bang chiem nhieu dien tich hon -> it trang chi co mot hinh
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.70}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
+% ----------------------------------------------------------------- màu sắc
+\definecolor{gre}{RGB}{0, 71, 171}      % xanh đậm — màu nhấn chính
+\definecolor{gree}{RGB}{173, 216, 230}  % xanh nhạt
+\definecolor{notebg}{RGB}{246, 248, 251}
+\definecolor{quotebar}{RGB}{190, 190, 190}
+
+% ----------------------------------------------------------------- tên tiếng Việt
+% (không phụ thuộc babel để preamble chạy được với mọi engine)
+\renewcommand{\figurename}{Hình}
+\renewcommand{\tablename}{Bảng}
+\renewcommand{\contentsname}{MỤC LỤC}
+\renewcommand{\listfigurename}{DANH MỤC HÌNH VẼ}
+\renewcommand{\listtablename}{DANH MỤC BẢNG}
+\renewcommand{\refname}{TÀI LIỆU THAM KHẢO}
+
+% ----------------------------------------------------------------- đánh số
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\captionsetup{labelsep=period,font=small,labelfont=bf,justification=centering,
+              width=0.92\textwidth,skip=6pt}
+\captionsetup[table]{position=top}
+
+% ----------------------------------------------------------------- tiêu đề mục
+\titleformat{\section}[hang]
+  {\normalfont\large\bfseries\filcenter}{CHƯƠNG \thesection.}{0.6em}{}
+\titlespacing*{\section}{0pt}{0pt}{1.2em}
+\newcommand{\chuong}[1]{\clearpage\section{#1}}
+\titleformat{\subsection}[hang]
+  {\normalfont\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{1.3em}{0.6em}
+\titleformat{\subsubsection}[hang]
+  {\normalfont\normalsize\bfseries\itshape}{\thesubsubsection.}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{1.0em}{0.5em}
+
+% Mục không đánh số (lời cảm ơn, tóm tắt, phụ lục…)
+\newcommand{\frontsection}[1]{%
+  \clearpage
+  \begin{center}\large\bfseries #1\end{center}
+  \vspace{0.6em}
+  \addcontentsline{toc}{section}{#1}%
 }
-\fancyhead[R]{\footnotesize \textbf{ Bài tập lớn - Phương Pháp Tính}}
-\section*{Danh sách thành viên}
-\begin{table}[h!]
+
+% ----------------------------------------------------------------- mục lục
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecfont}{\bfseries}
+\renewcommand{\cftsecpresnum}{CHƯƠNG }
+\renewcommand{\cftsecaftersnum}{.}
+\setlength{\cftsecnumwidth}{7.2em}
+\renewcommand{\cftsecpagefont}{\bfseries}
+\setlength{\cftbeforesecskip}{4pt}
+\renewcommand{\cftfigpresnum}{Hình }
+\renewcommand{\cfttabpresnum}{Bảng }
+\setlength{\cftfignumwidth}{4.2em}
+\setlength{\cfttabnumwidth}{4.2em}
+
+% Căn giữa tiêu đề Mục lục / Danh mục hình / Danh mục bảng
+\renewcommand{\cfttoctitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftloftitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterloftitle}{\hfill}
+\renewcommand{\cftlottitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterlottitle}{\hfill}
+
+% ----------------------------------------------------------------- khung ghi chú
+\newtcolorbox{ghichu}{%
+  enhanced, sharp corners,
+  colback=notebg, colframe=gre,
+  boxrule=0pt, leftrule=3.5pt, toprule=0pt, bottomrule=0pt, rightrule=0pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  before skip=10pt, after skip=10pt,
+}
+\newtcolorbox{trichdan}{%
+  enhanced, breakable, sharp corners,
+  colback=white, colframe=quotebar,
+  boxrule=0pt, leftrule=2.5pt, toprule=0pt, bottomrule=0pt, rightrule=0pt,
+  left=10pt, right=10pt, top=5pt, bottom=5pt,
+  fontupper=\itshape\small,
+  before skip=9pt, after skip=9pt,
+}
+
+% ----------------------------------------------------------------- trình bày đoạn
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.45em}
+\onehalfspacing
+\setlength{\emergencystretch}{3em}
+\sloppy
+
+% ----------------------------------------------------------------- header/footer
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\fancyhead[L]{\footnotesize\itshape GasSeeker — Robot dò tìm nguồn rò rỉ khí}
+\fancyhead[R]{\footnotesize\itshape Nhóm 14 · PIFKID 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+% =============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------ TRANG BÌA
+\begin{titlepage}
+  \input{Khung}
+\end{titlepage}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% -------------------------------------------------------- DANH SÁCH THÀNH VIÊN
+\frontsection{DANH SÁCH THÀNH VIÊN VÀ NGƯỜI HƯỚNG DẪN}
+
+\begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.5} % tăng khoảng cách giữa các hàng
-\begin{tabular}{|p{0.9cm}|p{4cm}|p{1.5cm}|p{2cm}|p{5cm}|}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|c|p{5.2cm}|p{3.2cm}|p{4.4cm}|}
 \hline
-\textbf{STT} & \textbf{Họ và tên đệm} & \textbf{Tên} & \textbf{MSSV} & \textbf{Ghi chú}\\ 
+\textbf{STT} & \textbf{Họ và tên} & \textbf{Vai trò} & \textbf{Ghi chú} \\
 \hline
-1 & Thôi Kiến & Huy & 2510657 & \\ 
+1 & Nguyễn Hoàng Minh Khang & Trưởng nhóm & Kiến trúc hệ thống, phần cứng \\
 \hline
-2 & Huỳnh Ngọc & Khải & 2510661 & \\ 
+2 & Bùi Nguyễn An Khang & Thành viên & Lắp ráp, hiệu chuẩn, thực nghiệm \\
 \hline
-3 & Đặng Đình & Khải &2510660 &\\ 
+3 & Dương Minh Trí & Thành viên & Tài liệu, xử lý số liệu, thống kê \\
 \hline
-4 & Nguyễn Minh & Quang & 2510928 & \\ 
-\hline
-5 & Trịnh Quốc & Tài & 2510951 & \\ 
-\hline
-6 & Nguyễn Huy & Hoàng & 2510598 & \\ 
-\hline
-7 &Tô Thế & Hiển & 2510571 & \\
-\hline 
 \end{tabular}
 \end{table}
-\newpage
+
+\vspace{1em}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|c|p{5.2cm}|p{7.8cm}|}
+\hline
+\textbf{STT} & \textbf{Người hướng dẫn} & \textbf{Đơn vị} \\
+\hline
+1 & Ông Gia Huy & CLB Pay it Forward \\
+\hline
+2 & Trịnh Quang Huy & CLB Pay it Forward \\
+\hline
+3 & Bùi Mạnh Hoàng & CLB Pay it Forward \\
+\hline
+\end{tabular}
+\end{table}
+
+% ------------------------------------------------------------ PHẦN ĐẦU BÁO CÁO
+\frontsection{LỜI CẢM ƠN}
+\input{body/sec01_loi_cam_on}
+
+\frontsection{TÓM TẮT}
+\input{body/sec02_tom_tat}
+
+\frontsection{ABSTRACT}
+\input{body/sec03_abstract}
+
+% ------------------------------------------------------------------- MỤC LỤC
+\clearpage
+\addtocontents{toc}{\protect\thispagestyle{fancy}}
 \tableofcontents
-\newpage
+
+\clearpage
+\addcontentsline{toc}{section}{DANH MỤC HÌNH VẼ}
+\listoffigures
+\thispagestyle{fancy}
+
+\clearpage
+\addcontentsline{toc}{section}{DANH MỤC BẢNG}
+\listoftables
+\thispagestyle{fancy}
+
+\frontsection{DANH MỤC TỪ VIẾT TẮT VÀ KÝ HIỆU}
+\input{body/sec04_danh_muc_tu_viet_tat_va_ky_hieu}
+
+% ---------------------------------------------------------------- NỘI DUNG
+\clearpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
-\addcontentsline{toc}{section}{Danh sách thành viên}
-\newpage
-\section{Phần mở đầu}
-\input{body/sec1}
-\section{Cơ sở lý thuyết Newton-Raphson cho hệ phương trình}
-\input{body/sec2}
-\section{Các phương pháp giải hệ tuyến tính phổ biến.}
-Ở đây ta sẽ chỉ nói qua về cách các thuật toán giải hệ hoạt động để có thể nhúng vào chương trình lập trình để có thể chạy được chứ không bàn về hay chứng minh lại cách mà phương pháp lặp hội tụ cũng như hội tụ như thế nào. 
-\input{body/sec3}
 
-\section{Triển Khai Newton-Raphson Vào Lập Trình}
-\input{body/sec4}
-\section{Ví dụ cụ thể và ứng dụng}
-\input{body/sec5}
-% \section{Kết Luận}
+\chuong{GIỚI THIỆU}
+\input{body/sec05_chuong_1_gioi_thieu}
 
-% Những gì achieve được, những gì chưa đạt được. 
+\chuong{CƠ SỞ LÝ THUYẾT}
+\input{body/sec06_chuong_2_co_so_ly_thuyet}
 
-\addcontentsline{toc}{section}{Tài liệu tham khảo}
-\input{body/tlieuthamkhao}
+\chuong{THIẾT KẾ PHẦN CỨNG}
+\input{body/sec07_chuong_3_thiet_ke_phan_cung}
+
+\chuong{THIẾT KẾ PHẦN MỀM}
+\input{body/sec08_chuong_4_thiet_ke_phan_mem}
+
+\chuong{MÔI TRƯỜNG MÔ PHỎNG VÀ THIẾT KẾ THÍ NGHIỆM}
+\input{body/sec09_chuong_5_moi_truong_mo_phong_va_thie}
+
+\chuong{KẾT QUẢ VÀ BÀN LUẬN}
+\input{body/sec10_chuong_6_ket_qua_va_ban_luan}
+
+\chuong{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
+\input{body/sec11_chuong_7_ket_luan_va_huong_phat_trie}
+
+% ------------------------------------------------------- TÀI LIỆU THAM KHẢO
 \clearpage
+\addcontentsline{toc}{section}{TÀI LIỆU THAM KHẢO}
+\input{body/sec12_tai_lieu_tham_khao}
+
+% ------------------------------------------------------------------ PHỤ LỤC
+\frontsection{PHỤ LỤC A. BẢNG HẰNG SỐ HỆ THỐNG}
+\input{body/sec13_phu_luc_a_bang_hang_so_he_thong}
+
+\frontsection{PHỤ LỤC B. PHÂN CÔNG CÔNG VIỆC}
+\input{body/sec14_phu_luc_b_phan_cong_cong_viec}
+
+\frontsection{PHỤ LỤC C. QUY TRÌNH VẬN HÀNH VÀ HIỆU CHUẨN}
+\input{body/sec15_phu_luc_c_quy_trinh_van_hanh_va_hieu}
+
 \end{document}

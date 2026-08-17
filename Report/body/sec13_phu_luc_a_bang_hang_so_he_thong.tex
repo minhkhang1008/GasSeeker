@@ -1,0 +1,120 @@
+Toàn bộ hằng số của hệ thống nằm tập trung tại một tệp cấu hình duy nhất. Mỗi hằng số được đánh dấu theo ba mức: \textbf{[CHỐT]} --- đã được chốt trong đề cương, không tự ý đổi; \textbf{[CHỌN]} --- nhóm tự chọn làm mặc định, có ghi lý do; \textbf{[ĐO]} --- bắt buộc đo hoặc hiệu chuẩn lại trên phần cứng thật.
+
+\needspace{6\baselineskip}\noindent \textbf{A.1. Sân thử nghiệm và nhiệm vụ}
+
+{\small\renewcommand{\arraystretch}{1.25}
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.3613\textwidth}>{\raggedright\arraybackslash}p{0.1806\textwidth}>{\raggedright\arraybackslash}p{0.3613\textwidth}}
+    \toprule
+    \textbf{Hằng số} & \textbf{Giá trị} & \textbf{Mức} \\
+    \midrule
+    Bề rộng sân (trục X) & 200 cm & [CHỌN] \\
+    Chiều dài sân (trục Y) & 200 cm & [CHỌN] \\
+    Cạnh một ô lưới & 25 cm & [CHỌN] \\
+    Lưới & 8 $\times$ 8 = 64 ô & dẫn xuất \\
+    Lề an toàn & 10 cm & [CHỌN] \\
+    Bán kính chấm điểm thành công & 30 cm & [CHỌN] \\
+    Thời gian tối đa một lần chạy & 480 s & [CHỌN] \\
+    \bottomrule
+  \end{longtable}
+}
+\needspace{6\baselineskip}\noindent \textbf{A.2. Hình học xe}
+
+{\small\renewcommand{\arraystretch}{1.25}
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.3613\textwidth}>{\raggedright\arraybackslash}p{0.1806\textwidth}>{\raggedright\arraybackslash}p{0.3613\textwidth}}
+    \toprule
+    \textbf{Hằng số} & \textbf{Giá trị} & \textbf{Mức} \\
+    \midrule
+    Đường kính bánh & 65 mm & [ĐO] \\
+    Khoảng cách hai bên bánh & 130 mm & [ĐO] \\
+    Số khe đĩa encoder & 20 & [ĐO] \\
+    Quãng đường mỗi xung & $\approx$ 10,21 mm & dẫn xuất \\
+    Số encoder thực tế & 1 (bánh sau trái) & theo phần cứng \\
+    Số công tắc va chạm & 1 (giữa đầu xe) & theo phần cứng \\
+    Khoảng lệch đầu dò MQ-3 về phía trước & 12 cm & [ĐO] \\
+    \bottomrule
+  \end{longtable}
+}
+\needspace{6\baselineskip}\noindent \textbf{A.3. Chuyển động}
+
+{\small\renewcommand{\arraystretch}{1.25}
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.3613\textwidth}>{\raggedright\arraybackslash}p{0.1806\textwidth}>{\raggedright\arraybackslash}p{0.3613\textwidth}}
+    \toprule
+    \textbf{Hằng số} & \textbf{Giá trị} & \textbf{Mức} \\
+    \midrule
+    PWM đi thẳng & 150 / 255 & [CHỌN] \\
+    PWM quay tại chỗ & 130 / 255 & [CHỌN] \\
+    PWM tối thiểu để bánh quay & 70 / 255 & [ĐO] \\
+    Hệ số P giữ hướng & 3,0 PWM/độ & [ĐO] \\
+    Hệ số P điều khiển quay & 2,2 & [ĐO] \\
+    Sai số góc chấp nhận khi quay & 3$^\circ$ & [CHỌN] \\
+    Thời gian phanh & 250 ms & [CHỌN] \\
+    Chu kỳ vòng điều khiển & 20 ms (50 Hz) & [CHỌN] \\
+    Chu kỳ đọc con quay & 10 ms (100 Hz) & [CHỌN] \\
+    \bottomrule
+  \end{longtable}
+}
+\needspace{6\baselineskip}\noindent \textbf{A.4. Cảm biến khí}
+
+{\small\renewcommand{\arraystretch}{1.25}
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.3613\textwidth}>{\raggedright\arraybackslash}p{0.1806\textwidth}>{\raggedright\arraybackslash}p{0.3613\textwidth}}
+    \toprule
+    \textbf{Hằng số} & \textbf{Giá trị} & \textbf{Mức} \\
+    \midrule
+    Chu kỳ lấy mẫu ADC & 50 ms (20 Hz) & [CHỌN] \\
+    Cửa sổ trung bình trượt & 16 mẫu ($\approx$ 0,8 s) & [CHỌN] \\
+    Thời gian đo nền lúc khởi động & 5 000 ms & [CHỌN] \\
+    Thời gian sấy nóng khuyến nghị & 5 phút & [CHỐT] \\
+    Ngưỡng phát hiện khí & 40 đếm ADC & [ĐO] \\
+    Ngưỡng đủ cao để xét dừng & 800 đếm ADC & [ĐO] \\
+    Ngưỡng cao nguyên & 30 đếm ADC & [ĐO] \\
+    Thời gian giữ điều kiện dừng & 6 000 ms & [CHỌN] \\
+    Chờ ổn định khi ngửi & 1 500 ms & [CHỌN] \\
+    Lấy trung bình khi ngửi & 800 ms & [CHỌN] \\
+    Độ phân giải ADC & 12 bit (0--4095) & phần cứng \\
+    Điện áp tham chiếu ADC & 3 100 mV & [ĐO] \\
+    Chia áp bảo vệ & 10 k$\Omega$ / 20 k$\Omega$ $\rightarrow$ 0,667 & [CHỐT] \\
+    Điện áp cấp cho MQ-3 & 5,0 V & [CHỐT] \\
+    Điện trở tải trên module & 10 k$\Omega$ & [ĐO] \\
+    Tỉ số Rs/R$_{0}$ trong không khí sạch & 60 & [CHỐT --- datasheet] \\
+    Hệ số A & 315,2 & [CHỌN / ĐO] \\
+    Hệ số B & --1,865 & [CHỌN / ĐO] \\
+    Ngưỡng cảnh báo 1 / 2 / 3 & 100 / 500 / 1500 ppm & [ĐO] \\
+    \bottomrule
+  \end{longtable}
+}
+\needspace{6\baselineskip}\noindent \textbf{A.5. Tham số ba thuật toán}
+
+{\small\renewcommand{\arraystretch}{1.25}
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.3613\textwidth}>{\raggedright\arraybackslash}p{0.1806\textwidth}>{\raggedright\arraybackslash}p{0.3613\textwidth}}
+    \toprule
+    \textbf{Hằng số} & \textbf{Giá trị} & \textbf{Mức} \\
+    \midrule
+    Bước quét của quét toàn bộ & 25 cm (= 1 ô) & [CHỌN] \\
+    Khoảng cách hai hàng quét & 25 cm & [CHỌN] \\
+    Quay lại điểm tốt nhất & Bật cho cả ba thuật toán & [CHỌN] \\
+    Khoảng cách tối thiểu để quay lại & 12 cm & [CHỌN] \\
+    Góc quét của bám gradient & $\pm$55$^\circ$ & [CHỌN] \\
+    Bước tiến của bám gradient & 30 cm & [CHỌN] \\
+    Số bước không cải thiện để thoát & 5 & [CHỌN] \\
+    Góc thoát cực trị địa phương & 120$^\circ$ & [CHỌN] \\
+    Giới hạn chống kẹt & 12 phép đo & [CHỌN] \\
+    Bước lưới giai đoạn dò tìm & 2 ô & [CHỌN] \\
+    Hướng gió khai báo & 0$^\circ$ (quạt ở cạnh +X) & [CHỌN] \\
+    Bước tiến ngược gió & 25 cm & [CHỌN] \\
+    Thời gian mất tín hiệu để cast & 7 000 ms & [CHỌN] \\
+    Biên độ cast ban đầu & 15 cm & [CHỌN] \\
+    Hệ số tăng biên độ cast & 1,6 & [CHỌN] \\
+    Biên độ cast tối đa & 90 cm & [CHỌN] \\
+    \bottomrule
+  \end{longtable}
+}

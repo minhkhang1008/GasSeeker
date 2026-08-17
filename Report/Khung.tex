@@ -1,33 +1,33 @@
+% =============================================================================
+%  Trang bìa
+% =============================================================================
 \thispagestyle{empty}
 
 % ----- Viền trang -----
 \begin{tikzpicture}[remember picture, overlay]
-  % Khung ngoài - màu xanh đậm
-  \draw[line width=4pt, blue!60!black]
+  \draw[line width=4pt, gre]
     ($(current page.north west)+(1.7cm,-1.7cm)$)
     rectangle
     ($(current page.south east)+(-1.7cm,1.7cm)$);
-   %--- GÓC TRÊN TRÁI ---
+
+  %--- GÓC TRÊN TRÁI ---
   \begin{scope}[shift={(current page.north west)}]
     \draw[line width=2pt]
       (1.5cm,-1.5cm) -- (2cm,-1.5cm)
       (1.5cm,-1.5cm) -- (1.5cm,-2cm);
   \end{scope}
-
   %--- GÓC TRÊN PHẢI ---
   \begin{scope}[shift={(current page.north east)}]
     \draw[line width=2pt]
       (-1.5cm,-1.5cm) -- (-2cm,-1.5cm)
       (-1.5cm,-1.5cm) -- (-1.5cm,-2cm);
   \end{scope}
-
   %--- GÓC DƯỚI TRÁI ---
   \begin{scope}[shift={(current page.south west)}]
     \draw[line width=2pt]
       (1.5cm,1.5cm) -- (2cm,1.5cm)
       (1.5cm,1.5cm) -- (1.5cm,2cm);
   \end{scope}
-
   %--- GÓC DƯỚI PHẢI ---
   \begin{scope}[shift={(current page.south east)}]
     \draw[line width=2pt]
@@ -38,36 +38,50 @@
 
 % ----- Nội dung bìa -----
 \begin{center}
-{\fontsize{15}{17}\selectfont
-\textbf{TRƯỜNG ĐẠI HỌC BÁCH KHOA }\\
-\textbf{ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH}\\[1cm]
+\setlength{\parskip}{0pt}
+
+{\fontsize{15}{18}\selectfont
+\textbf{CÂU LẠC BỘ PAY IT FORWARD}\\[0.25cm]
+\textbf{CHƯƠNG TRÌNH PIFKID 2026}\\[0.9cm]
 }
 
-\includegraphics[width=10cm, ]{pic/bklogo.png}\\[0.6cm]  % logo BK, bạn đặt file bklogo.png cùng thư mục
+% Nếu CLB có logo, đặt file vào pic/logo.png — bìa sẽ tự hiển thị.
+\IfFileExists{pic/logo.png}{%
+  \includegraphics[width=6cm]{pic/logo.png}\\[0.9cm]
+}{%
+  \vspace{0.4cm}
+}
 
-{\fontsize{18}{20}\selectfont
-\textbf{BÁO CÁO}\\[0.3cm]
-\textbf{BÀI TẬP LỚN PHƯƠNG PHÁP TÍNH}\\[0.5cm]
+{\fontsize{18}{22}\selectfont
+\textbf{BÁO CÁO TỔNG KẾT}\\[0.9cm]
 }
-{\fontsize{14}{16}\selectfont
-\textbf{\textit{ĐỀ TÀI}\\[0.2cm]
-}
-\begin{center}
-\hspace{0.5cm}\rule{13cm}{0.6pt} \\[4pt]
-{\bfseries\color{blue}\Large \MakeUppercase{Phương pháp Newton-Raphson \\ trong giải hệ phương trình phi tuyến.}
-\hspace{0.5cm}\rule{13cm}{0.6pt}
-}
-\end{center}
 
+{\fontsize{14}{17}\selectfont \textbf{\textit{ĐỀ TÀI}}\\[0.35cm]}
+
+\hspace{0.5cm}\rule{13cm}{0.6pt}\\[10pt]
+{\bfseries\color{gre}\LARGE GASSEEKER}\\[10pt]
+{\bfseries\color{gre}\large
+ROBOT TỰ HÀNH PHÁT HIỆN VÀ ĐỊNH VỊ\\[3pt]
+NGUỒN KHÍ BẤT THƯỜNG TRONG SỰ CỐ RÒ RỈ KHÍ}\\[10pt]
+\hspace{0.5cm}\rule{13cm}{0.6pt}\\[8pt]
+
+{\itshape\small So sánh có kiểm soát ba thuật toán tìm nguồn\\
+trên cùng một nền tảng phần cứng ràng buộc một cảm biến}\\[1.4cm]
+
+{\fontsize{13}{18}\selectfont
 \begin{tabular}{rl}
-\textbf{Giảng viên hướng dẫn:} & TS. Đậu Thế Phiệt \\
-\textbf{Lớp:} & L08 \\
-\textbf{Nhóm:} & 3 \\
-% \textbf{Nhóm:}& 14
+\textbf{Nhóm:} & 14 \\
+\textbf{Trưởng nhóm:} & Nguyễn Hoàng Minh Khang \\
+\textbf{Thành viên:} & Bùi Nguyễn An Khang \\
+                     & Dương Minh Trí \\[0.35cm]
+\textbf{Người hướng dẫn:} & Ông Gia Huy \\
+                          & Trịnh Quang Huy \\
+                          & Bùi Mạnh Hoàng \\
 \end{tabular}
+}
 
 \vfill
 {\fontsize{12}{14}\selectfont
-TP. HỒ CHÍ MINH – 2026
+TP. HỒ CHÍ MINH -- 2026
 }
-}\end{center}
+\end{center}

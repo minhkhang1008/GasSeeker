@@ -1,0 +1,40 @@
+\subsection{Kết luận}
+Nhóm đã xây dựng \textbf{GasSeeker} --- một robot tự hành dò tìm nguồn phát khí chỉ dùng một cảm biến khí, kèm một trạm mặt đất cho phép người vận hành theo dõi toàn bộ quá trình từ vị trí an toàn.
+
+Đóng góp trung tâm về mặt tư duy thiết kế là cách nhìn nhận ràng buộc một cảm biến. Nó \textbf{không phải là chỗ cắt giảm chi phí}, mà là điều kiện tạo ra bài toán: khi không thể đo chênh lệch nồng độ trong không gian tại cùng một thời điểm --- và Chương 2 đã trình bày lập luận vật lý cho thấy thêm cảm biến thứ hai cũng không giải quyết được điều đó --- robot buộc phải dùng \textbf{thời gian, chuyển động và thông tin hướng gió} để thay thế.
+
+Về mặt kỹ thuật, nhóm đã thiết kế và hiện thực hoàn chỉnh: phần cứng xe bốn động cơ với cảm biến khí, con quay, encoder và công tắc va chạm; mạch nguồn hai nhánh tách biệt để loại nhiễu nguồn khỏi đường đo khí; đường truyền LoRa không chặn tới trạm mặt đất; kiến trúc phần mềm tách thuật toán khỏi phần cứng; chuỗi xử lý tín hiệu khí hai lớp bảo vệ quyết định định vị khỏi sai số hiệu chuẩn; và ba thuật toán tìm nguồn trên cùng một nền tảng.
+
+Về mặt kết quả, so sánh trên 180 lần chạy mô phỏng cho thấy một hiệu ứng đảo chiều rõ rệt và có ý nghĩa thống kê giữa bám gradient và surge-casting khi đổi chế độ dòng khí, trong khi quét toàn bộ không bị ảnh hưởng. Hai giả thuyết H1 và H2 được ủng hộ; H3 chỉ đúng một nửa, và phần bị bác bỏ của nó dẫn tới một nhận xét phương pháp có giá trị: \textbf{phủ kín không gian tìm kiếm không đồng nghĩa với định vị đúng}, vì phép quét vét cạn không vét cạn được sai số của phép đo.
+
+Kết luận cuối cùng của đề tài là \textbf{một quy tắc chọn thuật toán theo điều kiện dòng khí}, chứ không phải một tuyên bố rằng thuật toán nào tốt nhất.
+
+
+\subsection{Hạn chế}
+Nhóm liệt kê đầy đủ các hạn chế của đề tài, xếp theo mức độ nghiêm trọng.
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=0.15em,topsep=0.3em]
+  \item \textbf{Toàn bộ số liệu so sánh là kết quả mô phỏng.} Phần cứng đã được thiết kế, đấu nối và lập trình hoàn chỉnh, firmware biên dịch sạch và có chế độ kiểm tra phần cứng riêng, nhưng nhóm chưa chạy đủ số lần trên xe thật để có số liệu thực nghiệm đối chiếu. Đây là hạn chế lớn nhất.
+  \item \textbf{Chưa thực hiện phân tích độ nhạy tham số mô phỏng.} Như đã nêu ở mục 5.5 và 6.9, đây là phần cần thiết để loại trừ khả năng kết quả phụ thuộc vào bộ tham số cụ thể.
+  \item \textbf{Các ngưỡng điều khiển vẫn là giá trị phỏng đoán.} Ba ngưỡng quan trọng nhất --- ngưỡng phát hiện khí, ngưỡng đủ cao để xét dừng và ngưỡng cao nguyên --- hiện được đặt theo mô hình cảm biến chứ chưa đo trên phần cứng thật.
+  \item \textbf{Đường đặc tuyến nồng độ chỉ là ước lượng} từ hai điểm đọc trên đồ thị datasheet, chưa hiệu chuẩn bằng nguồn khí chuẩn đã biết nồng độ. Vì vậy giá trị ppm hiển thị chỉ nên hiểu là tương đối. Như đã trình bày ở mục 4.2, thuật toán không phụ thuộc vào con số này.
+  \item \textbf{Robot không tự đo hướng gió.} Hướng gió là điều kiện biên khai báo trước theo vị trí đặt quạt. Nếu gió đổi hướng giữa chừng, surge-casting sẽ tiến sai hướng, chuyển sang quét ngang liên tục và cuối cùng quay về quét thô.
+  \item \textbf{Chỉ có một encoder}, lắp ở bánh sau trái, nên quãng đường đo được kém chính xác hơn so với cấu hình hai encoder, và chiều quay của bánh phải chỉ được suy ra từ lệnh đang cấp cho động cơ. Nếu bánh trái trượt, quãng đường sẽ sai một cách hệ thống.
+  \item \textbf{Sai số dead reckoning tích luỹ theo quãng đường} ở mức khoảng 0,9 \% và không tự sửa được. Chính yếu tố này, chứ không phải thời gian chạy, là thứ giới hạn kích thước sân thực dụng ở khoảng 3 $\times$ 3 m với ô lưới 25 cm.
+  \item \textbf{Xe không có khả năng tránh vật cản}, chỉ có phản ứng sau khi va chạm.
+  \item \textbf{Bài toán giới hạn ở một nguồn phát duy nhất} trong sân phẳng không vật cản. Với hai nguồn, phiên bản hiện tại sẽ đi tới một trong hai nguồn và dừng, không phát hiện được là có nguồn thứ hai.
+  \item \textbf{Chưa bù ảnh hưởng của nhiệt độ và độ ẩm.} Cảm biến MQ phụ thuộc mạnh vào hai đại lượng này. Nhóm xử lý một phần bằng cách đo lại giá trị nền và R$_{0}$ mỗi lần khởi động, nên điều kiện phòng tại thời điểm chạy được hấp thụ vào giá trị nền; nhưng cách này không bù được nếu nhiệt độ hay độ ẩm thay đổi \textbf{trong lúc} đang chạy.
+\end{enumerate}
+Nhóm cho rằng việc biết rõ giới hạn của mình nằm ở đâu cũng là một phần của kết quả.
+
+
+\subsection{Hướng phát triển}
+Bốn hướng sau được xếp theo thứ tự nhóm cho là nên làm trước, dựa trên tỉ lệ giữa giá trị thu được và chi phí bỏ ra.
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=0.15em,topsep=0.3em]
+  \item \textbf{Đo hằng số thời gian thật của cảm biến MQ-3 rồi đưa vào mô hình.} Đây là việc rẻ nhất và có giá trị cao nhất: nó biến một tham số nhóm tự chọn thành một tham số đo được, và neo cả mô hình mô phỏng vào thực tế. Chỉ cần một đĩa cồn, một đồng hồ bấm giây và chế độ ghi bảng đã có sẵn trong firmware.
+  \item \textbf{Chạy thực nghiệm đủ số lần trên xe thật} để đối chiếu với bảng mô phỏng, kèm phân tích độ nhạy tham số. Đây là hai hạn chế đầu tiên ở mục 7.2.
+  \item \textbf{Gắn cảm biến hướng gió} --- một cánh gió hoặc một cảm biến kiểu dây nhiệt --- để surge-casting tự chủ hoàn toàn. Như đã nêu ở mục 4.6, máy trạng thái không phải sửa gì cả. Kết hợp với quy tắc chọn thuật toán ở mục 6.8, việc này còn cho phép robot \textbf{tự chọn thuật toán phù hợp} thay vì để người vận hành chọn trước.
+  \item \textbf{Chuyển sang thuật toán ước lượng xác suất vị trí nguồn} thay vì đi theo quy tắc cố định --- hướng mà tài liệu gọi là tìm kiếm dựa trên thông tin. Hướng này về nguyên tắc xử lý được cả bài toán nhiều nguồn phát, nhưng đòi hỏi tài nguyên tính toán và mô hình môi trường phức tạp hơn nhiều.
+\end{enumerate}
+Ngoài bốn hướng chính, hai cải tiến kỹ thuật khác đáng được ghi nhận. Thứ nhất là \textbf{giải chập tín hiệu cảm biến}: nếu biết hằng số thời gian của cảm biến, có thể ước lượng ngược lại nồng độ thật từ đường cong đang lên mà không cần chờ ổn định --- đây chính là nội dung bài báo của Monroy và cộng sự [3], và nó cho phép rút ngắn đáng kể quy trình ``dừng ngửi'' 2,3 giây mà không tốn thêm chi phí linh kiện. Thứ hai là \textbf{lắp thêm encoder thứ hai} ở bánh phải, chỉ cần đổi một hằng số cấu hình là toàn bộ phần còn lại của firmware tự thích ứng.
