@@ -1,0 +1,83 @@
+\subsection{Khắc phục nhược điểm tính toán Jacobian bằng thuật toán Broyden}
+\begin{itemize}
+    \item Để vượt qua rào cản về giới hạn tài nguyên tính toán, quá trình lập trình phần mềm thực tế đòi hỏi sự áp dụng của các phương pháp xấp xỉ. 
+    \item Khái niệm "xấp xỉ" ở đây là sự đánh đổi  chủ động: giảm độ phức tạp tính toán ở mỗi bước lặp để đổi lấy việc bảo toàn bộ nhớ và rút ngắn tổng thời gian chạy.
+\end{itemize}
+Với chi phí tính toán đạo hàm quá đắt đỏ, phương pháp Broyden được sử dụng để xấp xỉ ma trận Jacobian.
+\subsubsection{ Giới hạn của giải tích chính xác và Rào cản $O(n^3)$}
+Bản chất của phương pháp Newton-Raphson tại bước lặp $k$ là giải bài toán tuyến tính hóa:
+
+\[
+J(X^{(k)}) \cdot \Delta X^{(k)} = -F(X^{(k)})
+\]
+
+Việc sử dụng Jacobian giải tích chính xác $J(X^{(k)})$ tạo ra hai gánh nặng tính toán khổng lồ:
+
+\begin{enumerate}
+    \item \textbf{Chi phí thiết lập:} Cần tính toán lại $n^2$ biểu thức đạo hàm riêng tại mỗi bước lặp. Với các mô hình phi tuyến phức tạp, chi phí này vô cùng đắt đỏ.
+    \item \textbf{Chi phí giải hệ tuyến tính:} Để tìm $\Delta X^{(k)}$, việc áp dụng các thuật toán giải trực tiếp (như phép khử Gauss hay phân rã LU) đòi hỏi số lượng phép toán dấu phẩy động (FLOPs) tiệm cận ngưỡng $\frac{2}{3}n^3$. Tức là độ phức tạp thời gian đạt $O(n^3)$, gây bùng nổ thời gian chạy khi kích thước hệ phương trình $n$ tăng lên.
+\end{enumerate}
+
+
+
+
+\subsubsection{Chi phí tính toán và rào cản của Ma trận Jacobian}
+   Công thức lặp Newton-Raphson cho hệ $n$ phương trình phi tuyến đa biến có dạng:
+
+$$X^{(k+1)} = X^{(k)} - [J(X^{(k)})]^{-1} F(X^{(k)})$$
+
+Để thực hiện được một bước lặp $k$, hệ thống máy tính phải giải quyết hai bài toán cốt lõi, cả hai đều tiêu tốn rất nhiều tài nguyên:
+\begin{enumerate}
+    \item \textbf{Chi phí thiết lập ma trận $J(X^{(k)})$}: Ma trận Jacobian có kích thước $n \times n$. Tại mỗi bước lặp, máy tính phải đánh giá lại giá trị của $n^2$ đạo hàm riêng.
+    Việc này đòi hỏi khối lượng phép tính khổng lồ, đặc biệt khi các phương trình $F_i(X)$ biểu diễn mô hình của các linh kiện phi tuyến phức tạp (như Diode, BJT, MOSFET).
+
+    \item \textbf{Rào cản độ phức tạp}: Trong lập trình giải tích số thực tế, người ta không bao giờ tính toán trực tiếp ma trận nghịch đảo $[J(X^{(k)})]^{-1}$. Thay vào đó, phương trình được viết lại dưới dạng hệ phương trình tuyến tính:
+    \[
+J(X^{(k)}) \cdot \Delta X = -F(X^{(k)})
+\]
+
+(với $\Delta X = X^{(k+1)} - X^{(k)}$).
+
+Tuy nhiên, các thuật toán tiêu chuẩn để giải hệ tuyến tính này như khử Gauss (Gaussian Elimination) hay phân rã LU (LU Decomposition) đối với một ma trận đầy đủ (dense matrix) đều có độ phức tạp thời gian là $O(n^3)$.
+\end{enumerate}
+\textbf{Sự bùng nổ tổ hợp hàm lập phương $O(n^3)$ }:
+\begin{itemize}
+    \item Nếu  kích thước hệ phương trình (số nút và nhánh trong mạch điện) tăng lên 10 lần, thời gian tính toán của CPU sẽ tăng lên $10^3 = 1000$ lần. Đồng thời, việc lưu trữ ma trận Jacobian dạng đầy đủ đòi hỏi độ phức tạp không gian là $O(n^2)$.
+    \item Đối với các bài toán thực tế như mô phỏng Vi mạch tích hợp (IC) chứa hàng ngàn đến hàng triệu nút, phương pháp Newton-Raphson nguyên thủy sẽ nhanh chóng làm tràn bộ nhớ RAM và khiến hệ thống treo vì thời gian chạy quá lâu.
+\end{itemize}
+
+\subsubsection{Động lực của xấp xỉ: Phương trình cát tuyến}
+
+Để vượt qua rào cản trên, Phương pháp Tựa Newton (Quasi-Newton) từ bỏ việc tính chính xác ma trận Jacobian ở mọi vòng lặp. Thay vào đó, nó xây dựng một ma trận xấp xỉ $B_k \approx J(X^{(k)})$.\\
+
+Yêu cầu cơ bản nhất của ma trận $B_k$ là phải thỏa mãn \textbf{phương trình cát tuyến } – bản chất là dạng mở rộng đa chiều của công thức đạo hàm xấp xỉ:
+
+\[
+B_k \cdot \Delta X^{(k-1)} = \Delta F^{(k-1)}
+\]
+
+Trong đó: $\Delta F^{(k-1)} = F(X^{(k)}) - F(X^{(k-1)})$ và $\Delta X^{(k-1)} = X^{(k)} - X^{(k-1)}$.
+\subsubsection*{ Tối ưu hóa với Phương pháp Broyden và Công thức Sherman-Morrison}
+
+Trong họ phương pháp Quasi-Newton, thuật toán Broyden là đại diện xuất sắc nhất cho việc giải hệ phương trình phi tuyến. Thuật toán này sử dụng kỹ thuật cập nhật hạng một (rank-one update), nghĩa là ma trận xấp xỉ ở bước hiện tại được nội suy trực tiếp từ bước trước đó:
+
+\[
+B_k = B_{k-1} + \frac{\Delta F^{(k-1)} - B_{k-1} \Delta X^{(k-1)}}{\|\Delta X^{(k-1)}\|^2} (\Delta X^{(k-1)})^T
+\]
+\textbf{Điểm đột phá so với phương pháp thông thường}\\
+Thay vì phải cập nhật ma trận $B_k$ rồi lại tốn chi phí $O(n^3)$ để giải hệ phương trình, phương pháp Broyden áp dụng Bổ đề Sherman-Morrison để trực tiếp cập nhật luôn ma trận nghịch đảo $H_k = B_k^{-1}$:
+
+\[
+H_k = H_{k-1} + \frac{(\Delta X^{(k-1)} - H_{k-1} \Delta F^{(k-1)}) (\Delta X^{(k-1)})^T H_{k-1}}{(\Delta X^{(k-1)})^T H_{k-1} \Delta F^{(k-1)}}
+\]
+
+\begin{itemize}
+    \item \textbf{Ý nghĩa cốt lõi:} Biểu thức trên cấu thành hoàn toàn từ phép nhân ma trận với vector (matrix-vector multiplication) và nhân vector với vector. Do đó, chi phí để tính trực tiếp bước nhảy $\Delta X^{(k)} = -H_k F(X^{(k)})$ tại mỗi bước lặp bị ép xuống chỉ còn $O(n^2)$.
+\end{itemize}
+\subsubsection{Đánh giá sự đánh đổi}
+
+Việc áp dụng phương pháp Quasi-newton/Broyden là một sự đánh đổi đáng có khi muốn hướng tới cách giải quyết vấn đề về $o(n^3)$ một cách tối ưu trong thời gian thực thi:
+\begin{itemize}
+    \item\textbf{Tốc độ hội tụ}:Thuật toán đánh mất khả năng hội tụ bậc hai của Newton-Raphson gốc, giảm xuống mức hội tụ siêu tuyến tính. Điều này khiến tổng số bước lặp $k$ có thể tăng lên.
+    \item\textbf{Hiệu năng thực thi}:Mặc dù cần nhiều bước lặp hơn, nhưng việc cắt giảm độ phức tạp mỗi bước từ $O(n^3)$ xuống $O(n^2)$ mang lại một lợi thế quá lớn. Đối với các bài toán có $n$ đủ lớn, tổng thời gian CPU cần thiết  của phương pháp Broyden luôn vượt trội hoàn toàn so với việc giải tích chính xác.
+\end{itemize}

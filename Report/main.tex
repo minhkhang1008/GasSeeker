@@ -1,0 +1,155 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{subcaption}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{empheq}
+\usepackage{float}
+\usepackage{xurl}
+\usepackage{mathptmx}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{intersections}
+\usepgfplotslibrary{fillbetween}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{array}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tocloft}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{indentfirst}
+\AtBeginDocument{
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{1.0em}
+}
+\numberwithin{equation}{subsection}
+
+% Thiết lập cho gói listings để tô màu cho mã MATLAB
+%\begin{lstlisting} để sử dụng
+\definecolor{titlegreen}{RGB}{34, 85, 34}      % Xanh đậm tiêu đề
+\definecolor{codebg}{RGB}{248, 248, 248}        % Nền code xám nhạt
+\definecolor{kw}{RGB}{0, 0, 255}                % Keyword: xanh dương
+\definecolor{cmt}{RGB}{34, 139, 34}             % Comment: xanh lá
+\definecolor{str}{RGB}{163, 21, 21}             % String: đỏ
+\definecolor{num}{RGB}{128, 0, 128}             % Number: tím
+ 
+
+% ===== LỆNH TIỆN LỢI: \matlabcode{Tiêu đề}{code} =====
+% \lstnewenvironment{matlabcode}[1]{%
+%     \begin{matlabbox}{#1}
+%     \lstset{style=matlabStyle}
+% }{%
+%     \end{matlabbox}
+% }
+
+
+%Khung của câu hỏi, định nghĩa
+\newtcolorbox{bt}[1]{%
+  enhanced,
+  title={#1},
+	attach boxed title to top left={xshift=-4mm},boxrule=0pt,after skip=1cm,before skip=1cm,right skip=0cm,breakable,fonttitle=\bfseries,toprule=0pt,bottomrule=0pt,rightrule=0pt,leftrule=4pt,arc=0mm,skin=enhancedlast jigsaw,sharp corners,colframe=gree,colbacktitle=gre,boxed title style={
+		frame code={ 
+			\fill[gre](frame.south west)--(frame.north west)--(frame.north east)--([xshift=3mm]frame.east)--(frame.south east)--cycle;
+			\draw[line width=1mm,gre]([xshift=2mm]frame.north east)--([xshift=5mm]frame.east)--([xshift=2mm]frame.south east);
+			
+			\draw[line width=1mm,gre]([xshift=5mm]frame.north east)--([xshift=8mm]frame.east)--([xshift=5mm]frame.south east);
+			\fill[blue!85!black](frame.south west)--+(4mm,-2mm)--+(4mm,2mm)--cycle;
+		}
+	}
+}
+\definecolor{gre}{RGB}{0, 71, 171}   % xanh đậm
+\definecolor{gree}{RGB}{173, 216, 230} % xanh nhạt
+
+
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.5em}
+\renewcommand{\contentsname}{MỤC LỤC}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\usetikzlibrary{calc}
+\geometry{top=2.5cm,bottom=2.5cm,left=2cm,right=2cm}
+\addto\captionsvietnamese{\renewcommand{\refname}{Tài liệu tham khảo}}\setlength{\parindent}{2em}
+
+\begin{document}
+\begin{titlepage}
+   \input{Khung}
+\end{titlepage}
+\newpage
+\pagenumbering{gobble}
+% --- CẤU HÌNH HEADER CHUẨN MẪU 2 ---
+\setlength{\headheight}{1cm} % Tăng chiều cao header để chứa vừa logo
+\fancyheadoffset{2pt} 
+
+\fancyhead[L]{\footnotesize%
+    \begin{tabular}{ @{} m{1.5cm} @{} m{12cm} } % Cột 1: Logo (rộng 1.5cm), Cột 2: Chữ (rộng 12cm)
+        % LOGO
+        \includegraphics[height=0.9cm]{pic/bk_name_vi.png} 
+        & 
+        % CHỮ BÊN CẠNH
+        % \text{Trường đại học Bách khoa - ĐHQG TPHCM}          % Dòng 2 thường
+    \end{tabular}
+}
+\fancyhead[R]{\footnotesize \textbf{ Bài tập lớn - Phương Pháp Tính}}
+\section*{Danh sách thành viên}
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.5} % tăng khoảng cách giữa các hàng
+\begin{tabular}{|p{0.9cm}|p{4cm}|p{1.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{STT} & \textbf{Họ và tên đệm} & \textbf{Tên} & \textbf{MSSV} & \textbf{Ghi chú}\\ 
+\hline
+1 & Thôi Kiến & Huy & 2510657 & \\ 
+\hline
+2 & Huỳnh Ngọc & Khải & 2510661 & \\ 
+\hline
+3 & Đặng Đình & Khải &2510660 &\\ 
+\hline
+4 & Nguyễn Minh & Quang & 2510928 & \\ 
+\hline
+5 & Trịnh Quốc & Tài & 2510951 & \\ 
+\hline
+6 & Nguyễn Huy & Hoàng & 2510598 & \\ 
+\hline
+7 &Tô Thế & Hiển & 2510571 & \\
+\hline 
+\end{tabular}
+\end{table}
+\newpage
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\addcontentsline{toc}{section}{Danh sách thành viên}
+\newpage
+\section{Phần mở đầu}
+\input{body/sec1}
+\section{Cơ sở lý thuyết Newton-Raphson cho hệ phương trình}
+\input{body/sec2}
+\section{Các phương pháp giải hệ tuyến tính phổ biến.}
+Ở đây ta sẽ chỉ nói qua về cách các thuật toán giải hệ hoạt động để có thể nhúng vào chương trình lập trình để có thể chạy được chứ không bàn về hay chứng minh lại cách mà phương pháp lặp hội tụ cũng như hội tụ như thế nào. 
+\input{body/sec3}
+
+\section{Triển Khai Newton-Raphson Vào Lập Trình}
+\input{body/sec4}
+\section{Ví dụ cụ thể và ứng dụng}
+\input{body/sec5}
+% \section{Kết Luận}
+
+% Những gì achieve được, những gì chưa đạt được. 
+
+\addcontentsline{toc}{section}{Tài liệu tham khảo}
+\input{body/tlieuthamkhao}
+\clearpage
+\end{document}

@@ -1,0 +1,179 @@
+
+% \subsection{Vấn đề của việc tính toán truyền thống}
+
+% Trước tiên, ta xét hệ phương trình phi tuyến tổng quát sau đây:
+% \begin{equation}
+%     \begin{cases}
+%         ... \\
+%         ...
+%     \end{cases}
+% \end{equation}
+
+% Có thể nhận thấy, việc giải hệ phương trình bằng các công thức lặp thông thường đòi hỏi khối lượng tính toán rất lớn. Đặc biệt, thao tác tính toán trực tiếp ma trận nghịch đảo Jacobian tại mỗi bước lặp tiêu tốn nhiều thời gian và hoàn toàn không tối ưu về mặt tài nguyên phần cứng.
+
+% Hơn nữa, việc lựa chọn điểm xuất phát ban đầu hiện nay chủ yếu vẫn mang tính ngẫu nhiên, thiếu cơ sở toán học vững chắc, dẫn đến rủi ro thuật toán không thể hội tụ về đúng nghiệm mong muốn.
+
+% Nhận thấy sau khi thực hiện xấp xỉ Newton Raphson, ta thu được 1 phương trình là 1 hệ tuyến tính nếu ta đã chọn điểm bắt đầu $\mathbf{x^{(0)}}$. Vì vậy mục tiêu tiếp theo ta sẽ tối ưu việc giải hệ tuyến tính này. Do đó, báo cáo cần tập trung cải thiện hai vấn đề cốt lõi:
+% \begin{enumerate}
+%     \item Bàn luận về việc chọn điểm ban đầu sao cho thuật toán lặp hiệu quả cũng như hội tụ về nghiệm cần thiết, thực tế.
+%     \item Áp dụng phương pháp phân rã LU, lặp Jacobi để thay thế cho việc tìm nghịch đảo Jacobian, qua đó giải quyết bài toán đại số tuyến tính tại mỗi bước lặp một cách hiệu quả hơn.
+% \end{enumerate}
+
+% ==========================================
+% KẾT THÚC MỤC 3.1 - BẮT ĐẦU MỤC 3.2
+% ==========================================
+
+
+
+% \subsection{Phương pháp LU}
+
+% Cốt lõi của phương pháp phân rã LU là phân tích một ma trận hệ số $A$ thành tích của hai ma trận:
+% $$ A = L \cdot U $$
+% Trong đó, $L$ là ma trận tam giác dưới và $U$ là ma trận tam giác trên. Khi đó, việc giải hệ phương trình tuyến tính $A \cdot X = B$ được quy về việc giải tuần tự hai hệ phương trình tam giác đơn giản:
+% $$ L \cdot Y = B \quad \text{và} \quad U \cdot X = Y $$
+
+% Có nhiều phương pháp phân tích $A = L \cdot U$, tuy nhiên trong phạm vi báo cáo này, ta xét trường hợp ma trận $L$ có đường chéo chính bằng $1$, được gọi là thuật toán Doolittle. Khi đó, cấu trúc của hai ma trận có dạng:
+% $$
+% L = \begin{pmatrix} 1 & 0 & \dots & 0 \\ l_{21} & 1 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ l_{n1} & l_{n2} & \dots & 1 \end{pmatrix}, \quad
+% U = \begin{pmatrix} u_{11} & u_{12} & \dots & u_{1n} \\ 0 & u_{22} & \dots & u_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & u_{nn} \end{pmatrix}
+% $$
+
+% Để xác định các phần tử của $L$ và $U$, ta dựa vào phương trình $A = L \cdot U$. Theo định nghĩa phép nhân ma trận, phần tử ở hàng $i$, cột $j$ của ma trận $A$ (ký hiệu là $a_{ij}$) bằng tích vô hướng của hàng $i$ trong ma trận $L$ và cột $j$ trong ma trận $U$:
+% $$ a_{ij} = \sum_{k=1}^{n} l_{ik} u_{kj} $$
+
+% Do đặc thù $L$ là ma trận tam giác dưới ($l_{ik} = 0$ khi $k > i$) và $U$ là ma trận tam giác trên ($u_{kj} = 0$ khi $k > j$), giới hạn của tổng sẽ thay đổi tùy thuộc vào vị trí của phần tử đang xét nằm ở nửa trên hay nửa dưới đường chéo chính.
+
+% Trường hợp 1, xét việc tính các phần tử của ma trận $U$ ($i \le j$). Vì $i \le j$, các phần tử $l_{ik} = 0$ với mọi $k > i$. Do đó, tổng trên chỉ chạy đến $k = i$:
+% $$ a_{ij} = \sum_{k=1}^{i} l_{ik} u_{kj} = \sum_{k=1}^{i-1} l_{ik} u_{kj} + l_{ii} u_{ij} $$
+% Theo giả thiết của thuật toán Doolittle, các phần tử trên đường chéo của $L$ đều bằng 1 ($l_{ii} = 1$). Suy ra:
+% $$ a_{ij} = \sum_{k=1}^{i-1} l_{ik} u_{kj} + u_{ij} \implies u_{ij} = a_{ij} - \sum_{k=1}^{i-1} l_{ik} u_{kj} \quad (1 < i \le j) $$
+% Tại hàng đầu tiên ($i=1$), tổng phụ không tồn tại, ta có bước cơ sở $u_{1j} = a_{1j}$ với mọi $1 \le j \le n$.
+
+% Trường hợp 2, xét việc tính các phần tử của ma trận $L$ ($i > j$). Vì $i > j$, các phần tử $u_{kj} = 0$ với mọi $k > j$. Do đó, tổng chỉ chạy đến $k = j$:
+% $$ a_{ij} = \sum_{k=1}^{j} l_{ik} u_{kj} = \sum_{k=1}^{j-1} l_{ik} u_{kj} + l_{ij} u_{jj} $$
+% Rút phần tử $l_{ij}$ ra từ phương trình trên, ta được:
+% $$ l_{ij} = \frac{1}{u_{jj}} \left( a_{ij} - \sum_{k=1}^{j-1} l_{ik} u_{kj} \right) \quad (1 < j < i) $$
+% Tại cột đầu tiên ($j=1$), tổng phụ không tồn tại, ta có bước cơ sở $l_{i1} = \frac{a_{i1}}{u_{11}}$ với mọi $2 \le i \le n$.
+
+% Tổng hợp cả hai trường hợp, thuật toán nội suy tuần tự các phần tử của phân rã Doolittle được tóm tắt bằng hệ phương trình sau ~\cite{dau2026hephuongtrinh}:
+% \begin{equation}
+% \begin{cases}
+%     u_{1j} = a_{1j} & (1 \le j \le n) \\
+%     l_{i1} = \dfrac{a_{i1}}{u_{11}} & (2 \le i \le n) \\
+%     u_{ij} = a_{ij} - \sum\limits_{k=1}^{i-1} l_{ik}u_{kj} & (1 < i \le j) \\
+%     l_{ij} = \dfrac{1}{u_{jj}} \left( a_{ij} - \sum\limits_{k=1}^{j-1} l_{ik}u_{kj} \right) & (1 < j < i)
+% \end{cases}
+% \end{equation}
+
+
+
+\subsection{Phương pháp LU}
+
+Phương pháp phân rã LU giải hệ phương trình $A \cdot X = B$ bằng cách phân tích ma trận hệ số $A$ thành tích của hai ma trận tam giác: $A = L \cdot U$. Trong đó, theo thuật toán Doolittle, $L$ là ma trận tam giác dưới có đường chéo chính bằng $1$ và $U$ là ma trận tam giác trên.
+
+Khi đó, hệ phương trình ban đầu được đưa về giải tuần tự hai hệ phương trình tam giác đơn giản bằng phương pháp thế tiến và thế ngược:
+\begin{equation}
+L \cdot Y = B \quad \text{và} \quad U \cdot X = Y
+\end{equation}
+
+Dựa vào định nghĩa phép nhân ma trận $a_{ij} = \sum_{k=1}^{n} l_{ik} u_{kj}$, các phần tử của $L$ và $U$ được xác định tuần tự bằng hệ công thức sau \cite{dau2026hephuongtrinh}:
+\begin{equation}
+\begin{cases}
+    u_{1j} = a_{1j} & (1 \le j \le n) \\
+    l_{i1} = \dfrac{a_{i1}}{u_{11}} & (2 \le i \le n) \\
+    u_{ij} = a_{ij} - \sum\limits_{k=1}^{i-1} l_{ik}u_{kj} & (1 < i \le j) \\
+    l_{ij} = \dfrac{1}{u_{jj}} \left( a_{ij} - \sum\limits_{k=1}^{j-1} l_{ik}u_{kj} \right) & (1 < j < i)
+\end{cases}
+\end{equation}
+
+% \textbf{Ưu điểm của phương pháp:}
+% \begin{itemize}
+%     \item \textbf{Dễ lập trình:} Công thức tường minh giúp máy tính dễ dàng lặp qua các hàng/cột để thiết lập ma trận, tối ưu hơn việc tính ma trận nghịch đảo.
+%     \item \textbf{Vượt trội hơn khử Gauss khi đổi vế phải $B$:} Nếu ma trận $A$ cố định nhưng vế phải $B$ thay đổi, ta không cần thực hiện lại toàn bộ quá trình khử từ đầu. Do $L$ và $U$ đã được lưu trữ, ta chỉ cần lặp lại bước thế tuần tự cho các vector $B$ mới, giúp tiết kiệm tối đa chi phí tính toán.
+% \end{itemize}
+
+Việc áp dụng trực tiếp các công thức tường minh này giúp chương trình máy tính dễ dàng lặp qua các hàng và cột để thiết lập hai ma trận $L$ và $U$, tối ưu hơn rất nhiều so với việc tính toán ma trận nghịch đảo.
+
+Hơn nữa phương pháp này có lợi hơn so với khử Gauss đó là khi nếu ta đổi giá trị ma trận $B$ mà vẫn giữ $A$ thì ta không cần phải tính lại hết từ đầu như là của Gauss mà ta có thể chỉ cần tính tiếp tục luôn vì đã có ma trận $L, U$.
+
+% ==========================================
+% KẾT THÚC MỤC 3.2 - BẮT ĐẦU MỤC 3.3
+% ==========================================
+
+\subsection{Phương pháp lặp Jacobi.}
+
+Bên cạnh các phương pháp giải đúng như phân rã LU, đối với các hệ phương trình tuyến tính cỡ lớn, các phương pháp lặp như phương pháp Jacobi thường được ưu tiên sử dụng do ưu điểm về việc tiết kiệm bộ nhớ và tối ưu khối lượng tính toán.
+
+Tuy nhiên phương pháp này nói riêng và các phương pháp lặp nói chung thường sẽ chỉ được sử dụng nếu như nó có các điều kiện nhất định. Ở ví dụ này ta phải cần có ma trận này là ma trận đường chéo trội nghiêm ngặt
+\begin{bt}{Định lý ~\cite{dau2026hephuongtrinh}}
+    Để dãy các vectơ \(\{\mathbf{x}^{(m)}\}_{m=0}^\infty\) hội tụ về vectơ \({\overline{\mathbf{x}}}\) khi \(m \to +\infty\) thì điều kiện cần và đủ là những dãy tọa độ \(\{x_k^{(m)}\}\) hội tụ về các tọa độ tương ứng \(\overline{x}_{k}\), với mọi \(k = 1, 2, \dots, n\).
+\end{bt}
+
+% \begin{bt}{Định nghĩa ~\cite{dau2026hephuongtrinh}}
+% Số nhỏ nhất $k(A)$ thỏa điều kiện  $ k(A)\leqslant Cond(A) = ||A||.||A^{-1}|| $ được gọi
+% là số điều kiện của ma trận A.
+% \end{bt}
+
+% Trong thực hành tính toán, ta có thể gặp những hệ phương trình tuyến tính mà những thay đổi nhỏ trên các hệ số tự do của hệ sẽ gây ra những thay đổi rất lớn về nghiệm. Hệ phương trình tuyến tính như vậy được gọi là \textbf{hệ phương trình không ổn định trong tính toán}. Nếu ngược lại, hệ được gọi là \textbf{hệ phương trình ổn định trong tính toán}.
+
+% \textit{Chú ý.} Người ta chứng minh được rằng, số điều kiện của ma trận đặc trưng cho tính ổn định của hệ phương trình tuyến tính. Giá trị \( k(A) \) càng gần với \( 1 \) thì hệ càng ổn định. Số điều kiện \( k(A) \) càng lớn thì hệ càng mất ổn định ~\cite{dau2026hephuongtrinh}.
+
+\begin{bt}{Định nghĩa ~\cite{dau2026hephuongtrinh}}
+    Một ma trận vuông \(A\) cỡ \(n \times n\) được gọi là ma trận đường chéo trội nghiêm ngặt nếu đối với mọi hàng, trị tuyệt đối của phần tử nằm trên đường chéo chính lớn hơn tổng trị tuyệt đối của tất cả các phần tử còn lại trên hàng đó.$$\sum _{j=1,j\ne i}^{n}|a_{ij}|<|a_{ii}|,\quad i=1,2,\dots ,n$$
+\end{bt}
+
+Xét hệ phương trình đại số tuyến tính $AX = B$. Phương pháp Jacobi tiến hành phân tích ma trận hệ số thành $A = D - L - U$, trong đó $D$ là ma trận đường chéo, $L$ và $U$ tương ứng là phần tam giác dưới và trên (đã đổi dấu) của $A$. Khi đó, quá trình giải hệ được chuyển về dạng công thức lặp ma trận:
+\begin{equation}
+    X^{(m)} = T_J X^{(m-1)} + C_J, \quad m = 1, 2, \dots
+\end{equation}
+với $T_J = D^{-1}(L + U)$ là ma trận lặp và $C_J = D^{-1}B$.
+
+Dưới dạng tọa độ tường minh, giá trị của mỗi ẩn tại bước lặp thứ $m$ được xác định độc lập dựa trên kết quả của bước lặp trước đó:
+ị của biến \(x_{i}\) ở bước lặp thứ \(m\), ta sử dụng giá trị của các biến từ bước lặp trước đó \((m-1)\) ~\cite{dau2026hephuongtrinh}:\begin{equation}x_{i}^{(m)}=\frac{1}{a_{ii}}\left(-\sum _{j=1}^{i-1}a_{ij}x_{j}^{m-1}-\sum _{j=i+1}^{n}a_{ij}x_{j}^{m-1}+b_{i}\right)
+\label{eq:sec3_1}\end{equation}
+% \begin{equation}
+%     x_i^{(m)} = \frac{1}{a_{ii}} \left( b_i - \sum_{\substack{j=1 \\ j \neq i}}^{n} a_{ij}x_j^{(m-1)} \right), \quad i = 1, \dots, n
+%     
+% \end{equation}
+
+Quá trình lặp Jacobi đảm bảo hội tụ về nghiệm chính xác $\overline{X}$ với mọi véc-tơ khởi tạo ban đầu $X^{(0)}$ nếu $A$ là ma trận đường chéo trội nghiệm ngặt.
+
+Khi điều kiện này được đáp ứng, chuẩn vô cùng của ma trận lặp thỏa mãn do tính trội nghiêm ngặt ~\cite{dau2026hephuongtrinh}
+\begin{equation}
+    \|T_{j}\|_{\infty }=\|D^{-1}(L+U)\|_{\infty }=\max _{i=1,n}\sum _{j=1,j\ne i}^{n}\left|\frac{a_{ij}}{a_{ii}}\right|<1
+\end{equation}
+Để đánh giá sai số và quyết định dừng thuật toán, ta thường sử dụng công thức đánh giá hậu nghiệm giữa hai bước lặp liên tiếp ~\cite{dau2026hephuongtrinh} :
+\begin{equation}
+    \|X^{(m)} - \overline{X}\| \le \frac{\|T_J\|}{1 - \|T_J\|} \|X^{(m)} - X^{(m-1)}\|
+\end{equation}
+
+Ngoài ra ta còn có thể sử dụng sai số tiên nghiệm ~\cite{dau2026hephuongtrinh}
+
+\begin{equation}
+    \|X^{(m)} - \overline{X}\| \le \frac{\|T_J\|^m}{1 - \|T_J\|} \|X^{(1)} - X^{(0)}\|
+\end{equation}
+
+Thuật toán sẽ kết thúc khi $\|X^{(m)} - X^{(m-1)}\| < \epsilon$, với $\epsilon$ là sai số cho trước của bài toán.
+
+Thuật toán là vậy nhưng khi tính toán thực tế, ta sẽ tính rất đơn giản, đó là từ phương trình tuyến tính, ta cô lập từng giá trị $x_i$ trong hệ phương trình như là ở \ref{eq:sec3_1} rồi thay $\mathbf{x^{(0)}}$ vào là ta sẽ dần được $\mathbf{x^{(1)}}$ sau đó lặp đi lặp lại
+
+\subsection{Lặp Gauss - Seidel}
+
+Cũng với cách lập hàm $D,U,L$ như với cách lặp Jacobi nhưng Gauss - Seidel sẽ giải với  $$T_g = (D - L)^{-1}U, \ C_g = (D - L)^{-1}B$$
+
+Công thức lặp Gauss-Seidel ~\cite{dau2026hephuongtrinh}:$$X^{(m)}=T_{g}X^{(m-1)}+C_{g},\quad m=1,2,\dots $$Trong đó:\(X^{(m)}\) là vector nghiệm xấp xỉ ở bước lặp thứ $m$. \(X^{(m-1)}\) là vector nghiệm ở bước lặp trước đó.
+
+Phương pháp Gauss-Seidel: Khi tính thành phần thứ \(i\) (\(x_{i}^{(m)}\)) ở bước lặp \(m\), phương pháp này tận dụng ngay các giá trị mới vừa tìm được trong cùng bước lặp đó (\(x_1^{(m)}, x_2^{(m)}, \dots, x_{i-1}^{(m)}\)) thay vì dùng giá trị cũ như 
+
+Ta có sai số Gauss-Seidel được tính như của Jacobi, chỉ việc thay $T_J$ thành $T_G$. Ta được sai số hậu nghiệm
+
+\begin{equation}
+    \|X^{(m)} - \overline{X}\| \le \frac{\|T_G\|}{1 - \|T_G\|} \|X^{(m)} - X^{(m-1)}\|
+\end{equation}
+
+Sai số tiền nghiệm 
+
+\begin{equation}
+    \|X^{(m)} - \overline{X}\| \le \frac{\|T_J\|^m}{1 - \|T_J\|} \|X^{(1)} - X^{(0)}\|
+\end{equation}
+

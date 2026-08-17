@@ -248,9 +248,22 @@ vi sai hai bên). Nhưng **một encoder** gây hai lỗi nếu để nguyên:
   chặn `start` và in cảnh báo lớn nếu thiếu.
 - Cho phép ghi đè kích thước sân bằng `-D` lúc build.
 
-**Đã soạn** `docs/BAO_CAO_GIUA_KY.md` — nội dung báo cáo giữa kỳ đầy đủ: giới thiệu,
+**Đã soạn** `docs/BaoCaoGiuaKy.md` — nội dung báo cáo giữa kỳ đầy đủ: giới thiệu,
 lý do, vấn đề giải quyết, sơ đồ khối, sơ đồ nguồn, ba giải thuật (Mermaid), tiến độ,
 hạn chế, hướng phát triển. Hình minh hoạ copy vào `docs/img/` (đã bỏ khỏi `.gitignore`).
+
+**Đã soạn thêm (cùng phiên)** — người dùng báo thời gian sắp cạn, reviewer hỏi sâu:
+- `docs/GIAI_THICH_KY_THUAT.md` — 22 mục, giải thích **vì sao** từng quyết định:
+  vì sao ESP32-S3 (ADC 12 bit là điểm quyết định), vì sao 2 buck riêng (sụt áp làm
+  sợi đốt MQ-3 hạ nhiệt → tương quan giả giữa chuyển động và nồng độ), nguyên lý SnO2,
+  vì sao ppm khuếch đại nhiễu 1,87 lần, và **giải thích surge-casting thật kỹ**
+  (sợi khí rời rạc → gradient vô nghĩa → nhưng "ngửi thấy khí thì nguồn ở đầu gió"
+  luôn đúng vì là ràng buộc nhân quả).
+- `docs/PHAN_BIEN.md` — 22 câu hỏi xoáy + câu trả lời, kèm "ba câu cần thuộc lòng".
+  Câu khó nhất đã trả lời thẳng: "mô hình mô phỏng do chính em viết thì chứng minh
+  được gì" → thừa nhận nó KHÔNG chứng minh được ba giả thuyết.
+- `docs/SLIDES.md` — dàn ý 16 slide + 6 slide dự phòng + prompt đầy đủ cho
+  claude.com/design (khuyến nghị hơn Canva vì hình vẽ ở đây LÀ nội dung).
 
 **Ghi chú cho phiên sau**
 - Nếu sau này lắp thêm encoder thứ hai: chỉ cần đổi `ENCODER_COUNT = 2`, mọi chỗ khác

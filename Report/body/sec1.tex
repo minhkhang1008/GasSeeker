@@ -1,0 +1,33 @@
+\subsection{Lý do chọn đề tài}
+Ta có thể dễ dàng giải 1 phương trình bậc 2, bậc 3 
+$$ x^2-3x+2=0, x^3-2x+1=0,\dots$$dựa vào các công thức có sẵn cũng như máy tính cầm tay.
+
+Tuy nhiên trong khoa học và kỹ thuật, sẽ có các phương trình như
+
+Khi muốn làm hệ thống chính xác cao, ta cần tính dòng điện đi qua nếu cấp $V_D$ volt cho diode
+$$I = I_s \left( e^{\frac{V_D}{nV_T}} - 1 \right)$$
+
+Hay là ta muốn tính toán góc quay của 1 hệ robot có độ dài $l_1,l_2$ bằng Inverse Kinematic.
+
+$$\begin{cases} l_1 \cos(\theta_1) + l_2 \cos(\theta_1 + \theta_2) = x \\ l_1 \sin(\theta_1) + l_2 \sin(\theta_1 + \theta_2) = y \end{cases}$$
+
+Các hệ phương trình này thường không có nghiệm đóng (closed-form solution) và đòi hỏi khối lượng tính toán cực lớn nếu ta mở rộng ra nhiều ẩn. Do đó, việc ứng dụng các phương pháp giải số trên máy tính là yêu cầu cấp thiết trong kỹ thuật hiện đại.
+
+\subsection{Mục tiêu báo cáo}
+
+Mục tiêu bài báo cáo này là tìm ra các hướng giải quyết hệ phương trình phi tuyến bằng phương pháp newton kết hợp các phương pháp giải hệ tuyến tính để tối ưu hóa quá trình giải và tính toán hệ phi tuyến trong thực tế và các vấn đề kỹ thuật. 
+
+\subsection{Đối tượng và phạm vi}
+\textbf{Đối tượng}
+\begin{itemize}
+    \item Các hệ phương trình phi tuyến có dạng $F(\mathbf{x}) = \mathbf{0}$, trong đó $F: \mathbb{R}^n \to \mathbb{R}^n$.
+    \item Thuật toán lặp Newton-Raphson 
+    \item Các bài toán kỹ thuật thực tế dẫn đến hệ phi tuyến như bài toán mô hình hóa linh kiện điện tử.
+\end{itemize}
+\textbf{Phạm vi báo cáo}
+\begin{itemize}
+    \item \textbf{Lý thuyết:} Tập trung nghiên cứu cơ sở toán học của phương pháp Newton, điều kiện hội tụ và khả năng của nó trong việc kết hợp với phương pháp phân rã LU, lặp Jacobi.
+    \item \textbf{Về thuật toán:} Nghiên cứu cách kết hợp phương pháp Newton với các kỹ thuật khác để giải hệ hiệu quả.
+
+    \item \textbf{Về thực nghiệm:} Ứng dụng trong việc sử dụng Newton Raphson trong việc giải hệ phương trình phi tuyến của mạch nhiều diode.
+\end{itemize}

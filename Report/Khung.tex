@@ -1,0 +1,73 @@
+\thispagestyle{empty}
+
+% ----- Viền trang -----
+\begin{tikzpicture}[remember picture, overlay]
+  % Khung ngoài - màu xanh đậm
+  \draw[line width=4pt, blue!60!black]
+    ($(current page.north west)+(1.7cm,-1.7cm)$)
+    rectangle
+    ($(current page.south east)+(-1.7cm,1.7cm)$);
+   %--- GÓC TRÊN TRÁI ---
+  \begin{scope}[shift={(current page.north west)}]
+    \draw[line width=2pt]
+      (1.5cm,-1.5cm) -- (2cm,-1.5cm)
+      (1.5cm,-1.5cm) -- (1.5cm,-2cm);
+  \end{scope}
+
+  %--- GÓC TRÊN PHẢI ---
+  \begin{scope}[shift={(current page.north east)}]
+    \draw[line width=2pt]
+      (-1.5cm,-1.5cm) -- (-2cm,-1.5cm)
+      (-1.5cm,-1.5cm) -- (-1.5cm,-2cm);
+  \end{scope}
+
+  %--- GÓC DƯỚI TRÁI ---
+  \begin{scope}[shift={(current page.south west)}]
+    \draw[line width=2pt]
+      (1.5cm,1.5cm) -- (2cm,1.5cm)
+      (1.5cm,1.5cm) -- (1.5cm,2cm);
+  \end{scope}
+
+  %--- GÓC DƯỚI PHẢI ---
+  \begin{scope}[shift={(current page.south east)}]
+    \draw[line width=2pt]
+      (-1.5cm,1.5cm) -- (-2cm,1.5cm)
+      (-1.5cm,1.5cm) -- (-1.5cm,2cm);
+  \end{scope}
+\end{tikzpicture}
+
+% ----- Nội dung bìa -----
+\begin{center}
+{\fontsize{15}{17}\selectfont
+\textbf{TRƯỜNG ĐẠI HỌC BÁCH KHOA }\\
+\textbf{ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH}\\[1cm]
+}
+
+\includegraphics[width=10cm, ]{pic/bklogo.png}\\[0.6cm]  % logo BK, bạn đặt file bklogo.png cùng thư mục
+
+{\fontsize{18}{20}\selectfont
+\textbf{BÁO CÁO}\\[0.3cm]
+\textbf{BÀI TẬP LỚN PHƯƠNG PHÁP TÍNH}\\[0.5cm]
+}
+{\fontsize{14}{16}\selectfont
+\textbf{\textit{ĐỀ TÀI}\\[0.2cm]
+}
+\begin{center}
+\hspace{0.5cm}\rule{13cm}{0.6pt} \\[4pt]
+{\bfseries\color{blue}\Large \MakeUppercase{Phương pháp Newton-Raphson \\ trong giải hệ phương trình phi tuyến.}
+\hspace{0.5cm}\rule{13cm}{0.6pt}
+}
+\end{center}
+
+\begin{tabular}{rl}
+\textbf{Giảng viên hướng dẫn:} & TS. Đậu Thế Phiệt \\
+\textbf{Lớp:} & L08 \\
+\textbf{Nhóm:} & 3 \\
+% \textbf{Nhóm:}& 14
+\end{tabular}
+
+\vfill
+{\fontsize{12}{14}\selectfont
+TP. HỒ CHÍ MINH – 2026
+}
+}\end{center}
