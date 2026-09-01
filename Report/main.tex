@@ -111,16 +111,20 @@
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \renewcommand{\cftsecfont}{\bfseries}
 \renewcommand{\cftsecpresnum}{CHƯƠNG }
-\renewcommand{\cftsecaftersnum}{.}
+\renewcommand{\cftsecaftersnum}{.\hspace{0.3em}}
 \setlength{\cftsecnumwidth}{7.2em}
 \renewcommand{\cftsecpagefont}{\bfseries}
 \setlength{\cftbeforesecskip}{4pt}
+\renewcommand{\cftsubsecaftersnum}{.\hspace{0.3em}}
+\renewcommand{\cftsubsubsecaftersnum}{.\hspace{0.3em}}
+\setlength{\cftsubsecnumwidth}{3.2em}
+\setlength{\cftsubsubsecnumwidth}{4.2em}
 \renewcommand{\cftfigpresnum}{Hình }
 \renewcommand{\cfttabpresnum}{Bảng }
-\renewcommand{\cftfigaftersnum}{.}
-\renewcommand{\cfttabaftersnum}{.}
-\setlength{\cftfignumwidth}{5.2em}
-\setlength{\cfttabnumwidth}{5.2em}
+\renewcommand{\cftfigaftersnum}{.\hspace{0.3em}}
+\renewcommand{\cfttabaftersnum}{.\hspace{0.3em}}
+\setlength{\cftfignumwidth}{5.5em}
+\setlength{\cfttabnumwidth}{5.5em}
 
 % Căn giữa tiêu đề Mục lục / Danh mục hình / Danh mục bảng
 \renewcommand{\cfttoctitlefont}{\hfill\large\bfseries}
