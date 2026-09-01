@@ -1,13 +1,30 @@
-{\small\renewcommand{\arraystretch}{1.25}
-  \small
+Tại thời điểm hoàn tất báo cáo, nhóm đã hoàn thành kiến trúc hệ thống, triển khai phần mềm và thuật toán, đồng thời hoàn thành khâu lắp ráp và tích hợp phần cứng. Do thời gian có hạn, nhóm chưa tiến hành vận hành thực nghiệm trên xe thật và chưa thu thập dữ liệu thực địa; vì vậy, toàn bộ kết quả định lượng trong Chương 6 là kết quả mô phỏng.
+
+{\small
   \renewcommand{\arraystretch}{1.25}
-  \begin{longtable}{>{\raggedright\arraybackslash}p{0.2415\textwidth}>{\raggedright\arraybackslash}p{0.6873\textwidth}}
+  \begin{longtable}{>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.46\textwidth}}
     \toprule
-    \textbf{Thành viên} & \textbf{Nội dung phụ trách} \\
+    \textbf{Hạng mục} & \textbf{Trạng thái} & \textbf{Ghi chú} \\
     \midrule
-    Nguyễn Hoàng Minh Khang (trưởng nhóm) & Kiến trúc hệ thống \\
-    Bùi Nguyễn An Khang & Lắp ráp phần cứng \\
-    Dương Minh Trí & Xử lý tài liệu \\
+    Kiến trúc hệ thống, phần mềm và thuật toán & Đã hoàn thành & Hoàn thiện thiết kế tổng thể, mã nguồn điều khiển, các thuật toán tìm nguồn và môi trường mô phỏng. \\
+    Lắp ráp và tích hợp phần cứng & Đã hoàn thành khâu lắp ráp & Hoàn thiện khung xe, cụm động cơ, nguồn, mạch điều khiển và các cảm biến; chưa xác nhận bằng thử nghiệm vận hành đầy đủ. \\
+    Thực nghiệm trên xe thật & Chưa thực hiện & Chưa triển khai các lần chạy thực nghiệm do giới hạn thời gian. \\
+    Thu thập và đối chiếu dữ liệu thực địa & Chưa thực hiện & Chưa có dữ liệu xe thật để đối chiếu với kết quả mô phỏng. \\
     \bottomrule
   \end{longtable}
 }
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=0.34\textheight,keepaspectratio]{pic/tien_do_khung_xe.jpg}
+    \caption{Khung xe, cụm động cơ và giá pin sau khi lắp ráp.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=0.34\textheight,keepaspectratio]{pic/tien_do_khoang_dien_tu.jpg}
+    \caption{Khoang điện tử với các mạch nguồn, điều khiển và cảm biến.}
+  \end{subfigure}
+  \caption{Tiến độ lắp ráp phần cứng của hệ thống GasSeeker.}
+\end{figure}

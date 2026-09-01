@@ -179,9 +179,7 @@
   \input{Khung}
 \end{titlepage}
 
-\hypersetup{pageanchor=true}
-\pagenumbering{roman}
-\setcounter{page}{1}
+\pagenumbering{gobble}
 
 % - MỤC LỤC VÀ CÁC DANH MỤC
 \clearpage
@@ -206,16 +204,17 @@
 
 \begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.6}
+\small
+\renewcommand{\arraystretch}{1.35}
 \begin{tabular}{|c|p{5.2cm}|p{3.2cm}|p{4.4cm}|}
 \hline
-\textbf{STT} & \textbf{Họ và tên} & \textbf{Vai trò} & \textbf{Ghi chú} \\
+\textbf{STT} & \textbf{Họ và tên} & \textbf{Vai trò} & \textbf{Nội dung phụ trách} \\
 \hline
-1 & Nguyễn Hoàng Minh Khang & Trưởng nhóm & Kiến trúc hệ thống \\
+1 & Nguyễn Hoàng Minh Khang & Trưởng nhóm & Kiến trúc hệ thống; phát triển phần mềm và thuật toán; biên soạn báo cáo, xây dựng sơ đồ kỹ thuật \\
 \hline
-2 & Bùi Nguyễn An Khang & Thành viên & Lắp ráp phần cứng \\
+2 & Bùi Nguyễn An Khang & Thành viên & Lắp ráp, đấu nối và tích hợp phần cứng \\
 \hline
-3 & Dương Minh Trí & Thành viên & Xử lý tài liệu \\
+3 & Dương Minh Trí & Thành viên & Lắp ráp, đấu nối và tích hợp phần cứng \\
 \hline
 \end{tabular}
 \end{table}
@@ -248,6 +247,7 @@
 
 % - NỘI DUNG
 \clearpage
+\hypersetup{pageanchor=true}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
@@ -281,7 +281,7 @@
 \frontsection{PHỤ LỤC A. BẢNG HẰNG SỐ HỆ THỐNG}
 \input{body/sec13_phu_luc_a_bang_hang_so_he_thong}
 
-\frontsection{PHỤ LỤC B. PHÂN CÔNG CÔNG VIỆC}
+\frontsection{PHỤ LỤC B. TIẾN ĐỘ THỰC HIỆN}
 \input{body/sec14_phu_luc_b_phan_cong_cong_viec}
 
 \frontsection{PHỤ LỤC C. QUY TRÌNH VẬN HÀNH VÀ HIỆU CHUẨN}
