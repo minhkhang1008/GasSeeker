@@ -180,7 +180,7 @@
 \end{titlepage}
 
 \hypersetup{pageanchor=true}
-\pagenumbering{arabic}
+\pagenumbering{roman}
 \setcounter{page}{1}
 
 % - MỤC LỤC VÀ CÁC DANH MỤC
@@ -240,10 +240,16 @@
 
 % - TÓM TẮT
 \frontsection{TÓM TẮT}
+\begingroup
+\small
+\setstretch{1.25}
 \input{body/sec02_tom_tat}
+\endgroup
 
 % - NỘI DUNG
 \clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
 
 \chuong{GIỚI THIỆU}
 \input{body/sec05_chuong_1_gioi_thieu}
@@ -260,7 +266,7 @@
 \chuong{MÔI TRƯỜNG MÔ PHỎNG VÀ THIẾT KẾ THÍ NGHIỆM}
 \input{body/sec09_chuong_5_moi_truong_mo_phong_va_thie}
 
-\chuong{KẾT QUẢ VÀ BÀN LUẬN}
+\chuong{KẾT QUẢ MÔ PHỎNG VÀ BÀN LUẬN}
 \input{body/sec10_chuong_6_ket_qua_va_ban_luan}
 
 \chuong{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
