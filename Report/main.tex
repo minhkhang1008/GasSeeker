@@ -1,5 +1,5 @@
 % =============================================================================
-%  BÁO CÁO ĐỀ TÀI — GasSeeker
+%  BÁO CÁO ĐỀ TÀI - GasSeeker
 %  Nhóm 14 · CLB Pay it Forward · PIFKID 2026
 %
 %  Biên dịch:  pdflatex main  (2 lần)   hoặc   xelatex main  (2 lần)
@@ -9,7 +9,7 @@
 % =============================================================================
 \documentclass[a4paper,12pt]{article}
 
-% ----------------------------------------------------------------- font & mã
+% - font & mã
 % Preamble chạy được cả pdflatex lẫn xelatex/lualatex.
 \usepackage{iftex}
 \ifPDFTeX
@@ -21,13 +21,13 @@
   \usepackage{fontspec}
   \IfFontExistsTF{Times New Roman}
     {\setmainfont{Times New Roman}}
-    {\setmainfont{Liberation Serif}}
+    {\setmainfont{DejaVu Serif}}
   \IfFontExistsTF{Courier New}
     {\setmonofont{Courier New}[Scale=MatchLowercase]}
-    {\setmonofont{Liberation Mono}[Scale=MatchLowercase]}
+    {\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]}
 \fi
 
-% ----------------------------------------------------------------- gói dùng
+% - gói dùng
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{float}
@@ -63,13 +63,13 @@
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{4}
 
-% ----------------------------------------------------------------- màu sắc
-\definecolor{gre}{RGB}{0, 71, 171}      % xanh đậm — màu nhấn chính
+% - màu sắc
+\definecolor{gre}{RGB}{0, 71, 171}      % xanh đậm - màu nhấn chính
 \definecolor{gree}{RGB}{173, 216, 230}  % xanh nhạt
 \definecolor{notebg}{RGB}{246, 248, 251}
 \definecolor{quotebar}{RGB}{190, 190, 190}
 
-% ----------------------------------------------------------------- tên tiếng Việt
+% - tên tiếng Việt
 % (không phụ thuộc babel để preamble chạy được với mọi engine)
 \renewcommand{\figurename}{Hình}
 \renewcommand{\tablename}{Bảng}
@@ -78,7 +78,7 @@
 \renewcommand{\listtablename}{DANH MỤC BẢNG}
 \renewcommand{\refname}{TÀI LIỆU THAM KHẢO}
 
-% ----------------------------------------------------------------- đánh số
+% - đánh số
 \numberwithin{equation}{section}
 \numberwithin{figure}{section}
 \numberwithin{table}{section}
@@ -87,7 +87,7 @@
               width=0.92\textwidth,skip=6pt}
 \captionsetup[table]{position=top}
 
-% ----------------------------------------------------------------- tiêu đề mục
+% - tiêu đề mục
 \titleformat{\section}[hang]
   {\normalfont\large\bfseries\filcenter}{CHƯƠNG \thesection.}{0.6em}{}
 \titlespacing*{\section}{0pt}{0pt}{1.2em}
@@ -107,7 +107,7 @@
   \addcontentsline{toc}{section}{#1}%
 }
 
-% ----------------------------------------------------------------- mục lục
+% - mục lục
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \renewcommand{\cftsecfont}{\bfseries}
 \renewcommand{\cftsecpresnum}{CHƯƠNG }
@@ -128,7 +128,7 @@
 \renewcommand{\cftlottitlefont}{\hfill\large\bfseries}
 \renewcommand{\cftafterlottitle}{\hfill}
 
-% ----------------------------------------------------------------- khung ghi chú
+% - khung ghi chú
 \newtcolorbox{ghichu}{%
   enhanced, sharp corners,
   colback=notebg, colframe=gre,
@@ -145,18 +145,18 @@
   before skip=9pt, after skip=9pt,
 }
 
-% ----------------------------------------------------------------- trình bày đoạn
+% - trình bày đoạn
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0.45em}
 \onehalfspacing
 \setlength{\emergencystretch}{3em}
 \sloppy
 
-% ----------------------------------------------------------------- header/footer
+% - header/footer
 \pagestyle{fancy}
 \fancyhf{}
 \setlength{\headheight}{15pt}
-\fancyhead[L]{\footnotesize\itshape GasSeeker — Robot dò tìm nguồn rò rỉ khí}
+\fancyhead[L]{\footnotesize\itshape GasSeeker - Robot dò tìm nguồn rò rỉ khí}
 \fancyhead[R]{\footnotesize\itshape Nhóm 14 · PIFKID 2026}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -167,7 +167,7 @@
 % =============================================================================
 \begin{document}
 
-% ------------------------------------------------------------------ TRANG BÌA
+% - TRANG BÌA
 \begin{titlepage}
   \input{Khung}
 \end{titlepage}
@@ -175,8 +175,8 @@
 \pagenumbering{roman}
 \setcounter{page}{1}
 
-% -------------------------------------------------------- DANH SÁCH THÀNH VIÊN
-\frontsection{DANH SÁCH THÀNH VIÊN VÀ NGƯỜI HƯỚNG DẪN}
+% - DANH SÁCH THÀNH VIÊN
+\frontsection{DANH SÁCH THÀNH VIÊN VÀ NGƯỜI HỖ TRỢ}
 
 \begin{table}[H]
 \centering
@@ -185,11 +185,11 @@
 \hline
 \textbf{STT} & \textbf{Họ và tên} & \textbf{Vai trò} & \textbf{Ghi chú} \\
 \hline
-1 & Nguyễn Hoàng Minh Khang & Trưởng nhóm & Kiến trúc hệ thống, phần cứng \\
+1 & Nguyễn Hoàng Minh Khang & Trưởng nhóm & Kiến trúc hệ thống \\
 \hline
-2 & Bùi Nguyễn An Khang & Thành viên & Lắp ráp, hiệu chuẩn, thực nghiệm \\
+2 & Bùi Nguyễn An Khang & Thành viên & Lắp ráp phần cứng \\
 \hline
-3 & Dương Minh Trí & Thành viên & Tài liệu, xử lý số liệu, thống kê \\
+3 & Dương Minh Trí & Thành viên & Xử lý tài liệu \\
 \hline
 \end{tabular}
 \end{table}
@@ -201,7 +201,7 @@
 \renewcommand{\arraystretch}{1.6}
 \begin{tabular}{|c|p{5.2cm}|p{7.8cm}|}
 \hline
-\textbf{STT} & \textbf{Người hướng dẫn} & \textbf{Đơn vị} \\
+\textbf{STT} & \textbf{Người hỗ trợ} & \textbf{Đơn vị} \\
 \hline
 1 & Ông Gia Huy & CLB Pay it Forward \\
 \hline
@@ -212,17 +212,11 @@
 \end{tabular}
 \end{table}
 
-% ------------------------------------------------------------ PHẦN ĐẦU BÁO CÁO
-\frontsection{LỜI CẢM ƠN}
-\input{body/sec01_loi_cam_on}
-
+% - PHẦN ĐẦU BÁO CÁO
 \frontsection{TÓM TẮT}
 \input{body/sec02_tom_tat}
 
-\frontsection{ABSTRACT}
-\input{body/sec03_abstract}
-
-% ------------------------------------------------------------------- MỤC LỤC
+% - MỤC LỤC
 \clearpage
 \addtocontents{toc}{\protect\thispagestyle{fancy}}
 \tableofcontents
@@ -240,7 +234,7 @@
 \frontsection{DANH MỤC TỪ VIẾT TẮT VÀ KÝ HIỆU}
 \input{body/sec04_danh_muc_tu_viet_tat_va_ky_hieu}
 
-% ---------------------------------------------------------------- NỘI DUNG
+% - NỘI DUNG
 \clearpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -266,12 +260,12 @@
 \chuong{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
 \input{body/sec11_chuong_7_ket_luan_va_huong_phat_trie}
 
-% ------------------------------------------------------- TÀI LIỆU THAM KHẢO
+% - TÀI LIỆU THAM KHẢO
 \clearpage
 \addcontentsline{toc}{section}{TÀI LIỆU THAM KHẢO}
 \input{body/sec12_tai_lieu_tham_khao}
 
-% ------------------------------------------------------------------ PHỤ LỤC
+% - PHỤ LỤC
 \frontsection{PHỤ LỤC A. BẢNG HẰNG SỐ HỆ THỐNG}
 \input{body/sec13_phu_luc_a_bang_hang_so_he_thong}
 

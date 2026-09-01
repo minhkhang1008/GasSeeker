@@ -11,14 +11,14 @@ Hệ thống gồm \textbf{hai khối tách rời về mặt vật lý} (Hình 3
 \textbf{Khối thứ hai là trạm mặt đất}, nơi người vận hành đứng. Trạm gồm một module LoRa và một ESP32 thứ hai làm cầu nối, đưa dữ liệu về máy tính để ghi log và vẽ lại hành trình.
 
 \begin{ghichu}
-\textbf{Vì sao cần đến hai vi điều khiển?} Đây không phải hai vi điều khiển trên cùng một xe, mà là \textbf{hai đầu của một đường truyền}. Mục tiêu của đề tài là người vận hành không phải đi vào vùng có khí, nên bắt buộc phải có truyền không dây, mà một đường truyền thì phải có hai đầu. Module LoRa SX1262 giao tiếp qua SPI nên không cắm thẳng vào máy tính được; đầu thu vì vậy cần một vi điều khiển làm cầu nối SPI sang USB. Bỏ nó đi thì không mất một tính năng phụ nào cả --- mất luôn khả năng giám sát từ xa, tức là mất mục tiêu chính của đề tài.
+\textbf{Vì sao cần đến hai vi điều khiển?} Đây không phải hai vi điều khiển trên cùng một xe, mà là \textbf{hai đầu của một đường truyền}. Mục tiêu của đề tài là người vận hành không phải đi vào vùng có khí, nên bắt buộc phải có truyền không dây, mà một đường truyền thì phải có hai đầu. Module LoRa SX1262 giao tiếp qua SPI \cite{r10} nên không cắm thẳng vào máy tính được; đầu thu vì vậy cần một vi điều khiển làm cầu nối SPI sang USB. Bỏ nó đi thì không mất một tính năng phụ nào cả - mất luôn khả năng giám sát từ xa, tức là mất mục tiêu chính của đề tài.
 \end{ghichu}
 \begin{ghichu}
-\textbf{Vì sao dùng LoRa mà không dùng Wi-Fi có sẵn trên ESP32?} Hai lý do. Thứ nhất là hạ tầng: LoRa đạt cự ly hàng trăm mét mà \textbf{không cần một điểm phát sóng nào}, còn Wi-Fi thì cần một access point phủ tới đúng chỗ đang rò rỉ --- trong nhà xưởng hay bãi rác thì thường là không có. Thứ hai là nhiễu nội bộ: trên ESP32, khối Wi-Fi dùng chung tài nguyên với bộ chuyển đổi ADC2, nên bật Wi-Fi sẽ làm việc lấy mẫu tín hiệu khí kém ổn định. Nhóm muốn giữ đường đọc cảm biến khí sạch nhất có thể, vì đó là tín hiệu quyết định cả bài toán.
+\textbf{Vì sao dùng LoRa mà không dùng Wi-Fi có sẵn trên ESP32?} Lý do chính là hạ tầng: LoRa cho phép hai đầu liên lạc trực tiếp mà \textbf{không cần một điểm phát sóng nào}, còn Wi-Fi cần một access point phủ tới đúng khu vực đang rò rỉ - điều thường không bảo đảm trong nhà xưởng hay bãi rác. Cảm biến khí của hệ thống nối vào GPIO4, tức ADC1\_CH3 trên ESP32-S3 \cite{r9}; vì vậy báo cáo không dùng xung đột Wi-Fi/ADC2 làm lý do chọn LoRa.
 \end{ghichu}
 
 \subsection{Lựa chọn linh kiện}
-Mọi linh kiện đều được chọn theo một nguyên tắc chung: \textbf{giữ đường đọc tín hiệu khí sạch nhất có thể}, và không chi tiền vào những chỗ không làm thay đổi kết luận của đề tài. Bảng 3.1 liệt kê các linh kiện chính kèm lý do lựa chọn; ba mục đáng chú ý nhất --- vi điều khiển, cảm biến khí và module truyền tin --- được phân tích kỹ hơn ngay sau bảng và ở các mục 2.2.4, 3.3 và 3.6.
+Mọi linh kiện đều được chọn theo một nguyên tắc chung: \textbf{giữ đường đọc tín hiệu khí sạch nhất có thể}, và không chi tiền vào những chỗ không làm thay đổi kết luận của đề tài. Bảng 3.1 liệt kê các linh kiện chính kèm lý do lựa chọn; ba mục đáng chú ý nhất - vi điều khiển, cảm biến khí và module truyền tin - được phân tích kỹ hơn ngay sau bảng và ở các mục 2.2.4, 3.3 và 3.6.
 
 \begin{table}[!htbp]
   \centering
@@ -29,14 +29,14 @@ Mọi linh kiện đều được chọn theo một nguyên tắc chung: \textbf
     \toprule
     \textbf{Khối} & \textbf{Linh kiện} & \textbf{Lý do lựa chọn} \\
     \midrule
-    Vi điều khiển & ESP32-S3 DevKitC-1 & ADC 12 bit (so với 10 bit của nhiều dòng 8 bit) là yếu tố quyết định, vì bài toán dựa trên việc phân biệt các chênh lệch nhỏ của tín hiệu khí; ngoài ra có đủ chân, đủ tốc độ và hỗ trợ SPI cho LoRa \\
-    Cảm biến khí & MQ-3 & Rẻ, đọc được hơi cồn, có datasheet đầy đủ; độ chính xác thấp không ảnh hưởng kết luận vì thuật toán chỉ dùng tín hiệu tương đối (xem mục 2.2.4) \\
+    Vi điều khiển & ESP32-S3 DevKitC-1 & ADC 12 bit (so với 10 bit của nhiều dòng 8 bit) là yếu tố quyết định, vì bài toán dựa trên việc phân biệt các chênh lệch nhỏ của tín hiệu khí; ngoài ra có đủ chân, đủ tốc độ và hỗ trợ SPI cho LoRa \cite{r9} \\
+    Cảm biến khí & MQ-3 & Rẻ, đọc được hơi cồn, có datasheet đầy đủ \cite{r7}; độ chính xác thấp không ảnh hưởng kết luận vì thuật toán chỉ dùng tín hiệu tương đối (xem mục 2.2.4) \\
     Cảm biến hướng & MPU6050 / GY-521 & Cung cấp tốc độ góc quanh trục đứng; \textbf{bắt buộc} trong cấu hình một encoder vì không thể suy góc quay từ hiệu hai encoder \\
-    Đo quãng đường & Encoder quang HC-020K, đĩa 20 khe & Một xung ứng với $\pi$$\cdot$65/20 $\approx$ 10,2 mm quãng đường --- đủ mịn cho bước đi 25--30 cm \\
+    Đo quãng đường & Encoder quang HC-020K, đĩa 20 khe & Một xung ứng với $\pi$$\cdot$65/20 $\approx$ 10,2 mm quãng đường - đủ mịn cho bước đi 25--30 cm \\
     Động cơ và bánh & 4 động cơ giảm tốc V1, bánh 65 mm & Bốn bánh cho lực kéo ổn định trên mặt sàn phòng thí nghiệm \\
-    Mạch cầu H & 2 $\times$ TB6612FNG & Mỗi động cơ nằm trên một cầu H riêng; hiệu suất cao hơn và sụt áp thấp hơn L298N \\
+    Mạch cầu H & 2 $\times$ TB6612FNG & Mỗi động cơ nằm trên một cầu H riêng; hỗ trợ điều khiển hai động cơ DC và chế độ phanh \cite{r8} \\
     Va chạm & 1 công tắc hành trình V156 & Phản ứng va chạm là mức tối thiểu cần thiết; đề tài không đặt mục tiêu né vật cản \\
-    Truyền tin & SX1262 / Ra-01SH & Cự ly xa, không cần hạ tầng; băng 923 MHz nằm trong băng SRD của Việt Nam \\
+    Truyền tin & SX1262 / Ra-01SH & Bộ thu phát sub-GHz hỗ trợ điều chế LoRa và giao tiếp SPI \cite{r10} \\
     Nguồn & 2 $\times$ pin 18650 nối tiếp, XL4015 + LM2596 & Hai nhánh hạ áp độc lập (xem mục 3.3) \\
     \bottomrule
   \end{tabular}
@@ -58,7 +58,7 @@ Hình 3.2 mô tả toàn bộ đường phân phối nguồn. Nguồn là hai pi
 
 Ba nguyên tắc thiết kế được tuân thủ chặt chẽ:
 
-\textbf{Thứ nhất, tách nhánh động cơ khỏi nhánh cảm biến ngay từ pin.} Động cơ là tải đóng cắt liên tục; nếu dùng chung một mạch hạ áp với cảm biến thì mỗi lần xe khởi động hay đảo chiều, điện áp sẽ sụt và giá trị đọc từ cảm biến khí sẽ nhảy theo. Nghiêm trọng hơn, sụt áp làm \textbf{sợi đốt của MQ-3 hạ nhiệt}, và điện trở lớp nhạy khí phụ thuộc trực tiếp vào nhiệt độ sợi đốt. Hệ quả là một \textbf{tương quan giả} giữa chuyển động của xe và giá trị nồng độ đọc được --- đúng loại nhiễu nguy hiểm nhất cho một đề tài mà toàn bộ kết luận dựa trên việc so sánh những chênh lệch nhỏ của tín hiệu khí.
+\textbf{Thứ nhất, tách nhánh động cơ khỏi nhánh cảm biến ngay từ pin.} Động cơ là tải đóng cắt liên tục; nếu dùng chung một mạch hạ áp với cảm biến thì mỗi lần xe khởi động hay đảo chiều, điện áp sẽ sụt và giá trị đọc từ cảm biến khí sẽ nhảy theo. Nghiêm trọng hơn, sụt áp làm \textbf{sợi đốt của MQ-3 hạ nhiệt}, và điện trở lớp nhạy khí phụ thuộc trực tiếp vào nhiệt độ sợi đốt. Hệ quả là một \textbf{tương quan giả} giữa chuyển động của xe và giá trị nồng độ đọc được - đúng loại nhiễu nguy hiểm nhất cho một đề tài mà toàn bộ kết luận dựa trên việc so sánh những chênh lệch nhỏ của tín hiệu khí.
 
 \textbf{Thứ hai, module LoRa chỉ được cấp 3,3 V}, tuyệt đối không cấp 5 V, và phải gắn ăng-ten trước khi cấp nguồn để tránh hỏng tầng khuếch đại công suất.
 
@@ -125,17 +125,17 @@ MPU6050 được gắn phẳng và cố định chắc chắn trên khung, tươ
     \toprule
     \textbf{Tham số} & \textbf{Giá trị} & \textbf{Ghi chú} \\
     \midrule
-    Tần số & 923,0 MHz & Nằm giữa băng SRD Việt Nam 920--925 MHz \\
+    Tần số & 923,0 MHz & Cấu hình sử dụng trong mô phỏng và firmware \\
     Băng thông & 125 kHz & Cân bằng giữa tốc độ và độ nhạy \\
     Hệ số trải phổ (SF) & 9 & Dự phòng cự ly; hạ xuống SF7 nếu cần gói tin nhanh hơn \\
     Tỉ lệ mã sửa lỗi & 4/5 &  \\
-    Công suất phát & 14 dBm & Tương đương 25 mW EIRP, đúng giới hạn cho phép \\
+    Công suất phát & 14 dBm & Tương đương khoảng 25 mW tại ngõ ra; EIRP thực tế còn phụ thuộc độ lợi ăng-ten \\
     Từ đồng bộ & 0x34 & Tách mạng riêng của nhóm \\
     Chu kỳ gửi telemetry & 1 Hz &  \\
     \bottomrule
   \end{tabular}
 \end{table}
-Bảng 3.3 tóm tắt cấu hình đường truyền. Một quyết định thiết kế quan trọng: \textbf{việc truyền LoRa được thực hiện không chặn}. Hàm truyền dạng chặn của thư viện RadioLib giữ chương trình khoảng 200 ms ở SF9; với tốc độ xe 18 cm/s, xe sẽ đi lố khoảng 3,6 cm cho mỗi gói tin --- đủ để làm sai lệch vị trí gắn với phép đo. Firmware vì vậy dùng cơ chế bắt đầu truyền rồi chờ cờ ngắt DIO1, để vòng điều khiển không bao giờ bị chặn.
+Bảng 3.3 tóm tắt cấu hình đường truyền. Một quyết định thiết kế quan trọng: \textbf{việc truyền LoRa được thực hiện không chặn}. Hàm truyền dạng chặn của thư viện RadioLib giữ chương trình khoảng 200 ms ở SF9; với tốc độ xe 18 cm/s, xe sẽ đi lố khoảng 3,6 cm cho mỗi gói tin - đủ để làm sai lệch vị trí gắn với phép đo. Firmware vì vậy dùng cơ chế bắt đầu truyền rồi chờ cờ ngắt DIO1, để vòng điều khiển không bao giờ bị chặn.
 
 Gói tin được gửi dưới dạng CSV kèm mã kiểm tra XOR theo kiểu NMEA, cho phép trạm thu phát hiện gói hỏng. Trạm in ra \textbf{cả hai dạng}: một dòng máy đọc để ghi log tự động và một dòng người đọc để theo dõi trực tiếp.
 
