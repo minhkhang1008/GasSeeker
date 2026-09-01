@@ -117,8 +117,10 @@
 \setlength{\cftbeforesecskip}{4pt}
 \renewcommand{\cftfigpresnum}{Hình }
 \renewcommand{\cfttabpresnum}{Bảng }
-\setlength{\cftfignumwidth}{4.2em}
-\setlength{\cfttabnumwidth}{4.2em}
+\renewcommand{\cftfigaftersnum}{.}
+\renewcommand{\cfttabaftersnum}{.}
+\setlength{\cftfignumwidth}{5.2em}
+\setlength{\cfttabnumwidth}{5.2em}
 
 % Căn giữa tiêu đề Mục lục / Danh mục hình / Danh mục bảng
 \renewcommand{\cfttoctitlefont}{\hfill\large\bfseries}
@@ -168,12 +170,32 @@
 \begin{document}
 
 % - TRANG BÌA
+\hypersetup{pageanchor=false}
 \begin{titlepage}
   \input{Khung}
 \end{titlepage}
 
-\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
 \setcounter{page}{1}
+
+% - MỤC LỤC VÀ CÁC DANH MỤC
+\clearpage
+\addtocontents{toc}{\protect\thispagestyle{fancy}}
+\tableofcontents
+
+\clearpage
+\addcontentsline{toc}{section}{DANH MỤC HÌNH VẼ}
+\listoffigures
+\thispagestyle{fancy}
+
+\clearpage
+\addcontentsline{toc}{section}{DANH MỤC BẢNG}
+\listoftables
+\thispagestyle{fancy}
+
+\frontsection{DANH MỤC TỪ VIẾT TẮT VÀ KÝ HIỆU}
+\input{body/sec04_danh_muc_tu_viet_tat_va_ky_hieu}
 
 % - DANH SÁCH THÀNH VIÊN
 \frontsection{DANH SÁCH THÀNH VIÊN VÀ NGƯỜI HỖ TRỢ}
@@ -212,32 +234,12 @@
 \end{tabular}
 \end{table}
 
-% - PHẦN ĐẦU BÁO CÁO
+% - TÓM TẮT
 \frontsection{TÓM TẮT}
 \input{body/sec02_tom_tat}
 
-% - MỤC LỤC
-\clearpage
-\addtocontents{toc}{\protect\thispagestyle{fancy}}
-\tableofcontents
-
-\clearpage
-\addcontentsline{toc}{section}{DANH MỤC HÌNH VẼ}
-\listoffigures
-\thispagestyle{fancy}
-
-\clearpage
-\addcontentsline{toc}{section}{DANH MỤC BẢNG}
-\listoftables
-\thispagestyle{fancy}
-
-\frontsection{DANH MỤC TỪ VIẾT TẮT VÀ KÝ HIỆU}
-\input{body/sec04_danh_muc_tu_viet_tat_va_ky_hieu}
-
 % - NỘI DUNG
 \clearpage
-\pagenumbering{arabic}
-\setcounter{page}{1}
 
 \chuong{GIỚI THIỆU}
 \input{body/sec05_chuong_1_gioi_thieu}
