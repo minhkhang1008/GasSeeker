@@ -44,7 +44,7 @@ Sau bộ lọc, tín hiệu \textbf{tách làm hai nhánh không bao giờ gặp
 \textbf{Nhánh thứ hai - nồng độ ước lượng để hiển thị.} Tính ngược ra Rs, chia cho R$_{0}$ đã tự hiệu chuẩn lúc khởi động, đưa qua đường đặc tuyến luỹ thừa ra giá trị ppm, rồi so với ba ngưỡng cảnh báo 100 / 500 / 1500 ppm để hiển thị bốn mức: An toàn, Đã phát hiện, Cao, Nguy hiểm.
 
 \begin{ghichu}
-Đây là điểm cần được nhìn thấy rõ nhất trong toàn bộ thiết kế: \textbf{thuật toán tìm nguồn không hề dùng tới ppm}. Nó chỉ so sánh ``chỗ này đọc cao hơn hay thấp hơn chỗ kia''. Do đó sai số khuếch đại 1,87 lần ảnh hưởng tới \textbf{con số báo cho người vận hành}, chứ không chạm được vào \textbf{quyết định định vị}. Nói cách khác, độ chính xác tuyệt đối của cảm biến là một vấn đề về hiển thị, không phải một vấn đề về thuật toán.
+\textbf{Thuật toán tìm nguồn không hề dùng tới ppm}. Nó chỉ so sánh ``chỗ này đọc cao hơn hay thấp hơn chỗ kia''. Do đó sai số khuếch đại 1,87 lần ảnh hưởng tới \textbf{con số báo cho người vận hành}, chứ không chạm được vào \textbf{quyết định định vị}. Nói cách khác, độ chính xác tuyệt đối của cảm biến là một vấn đề về hiển thị, không phải một vấn đề về thuật toán.
 \end{ghichu}
 Giá trị nền được đo \textbf{một lần} lúc khởi động và \textbf{không tự trôi theo thời gian}. Một đường nền thích nghi sẽ dần ``nuốt'' mất tín hiệu khi robot ở lâu trong vùng có khí - đúng lúc tín hiệu quan trọng nhất. Người vận hành có thể yêu cầu đo lại đường nền bằng một lệnh trên cổng nối tiếp nếu điều kiện phòng thay đổi giữa buổi.
 
@@ -94,10 +94,6 @@ Bản cài đặt của nhóm ghép hai biến thể thường gặp trong tài 
   \item \textbf{Thoát cực trị địa phương.} Nếu sau 5 bước liên tiếp mà giá trị tốt nhất không được cải thiện, robot coi như đang mắc kẹt tại một cực trị địa phương và \textbf{quay một góc lớn 120$^\circ$} rồi đi tiếp.
   \item \textbf{Kết luận.} Khi thoả điều kiện dừng (mục 4.7), robot quay về điểm đã đo được giá trị cao nhất rồi mới báo kết quả.
 \end{enumerate}
-\begin{ghichu}
-Một chi tiết cần được nêu trung thực vì nó là \textbf{điểm yếu đã biết} của bản cài đặt: trong bước 3, giá trị của ứng viên ``thẳng'' là một giá trị \textbf{đã đo từ trước}, không phải một phép đo mới. Nghĩa là ba con số được so sánh không hoàn toàn cùng thời điểm. Việc ưu tiên đi thẳng ở bước 2 chính là biện pháp giảm thiểu vấn đề này: khi đi thẳng, hai phép đo cách nhau 30 cm, chênh lệch không gian đủ lớn để lấn át phần dư âm của cảm biến. Chỉ khi giá trị thực sự giảm thì mới phải chấp nhận thao tác quét ba hướng, và nhóm biết rằng đó là bước yếu nhất của thuật toán này.
-\end{ghichu}
-
 \subsection{Thuật toán 3 - surge-casting}
 \begin{figure}[!htbp]
   \centering

@@ -30,10 +30,6 @@ Với \textbf{môi trường phát tán đứt quãng} (có quạt), nhóm dùng
 \end{enumerate}
 Đây là dạng rút gọn của mô hình filament do Farrell và cộng sự công bố năm 2002 trên \textit{Environmental Fluid Mechanics} \cite{r2} - mô hình tiêu chuẩn để tạo cấu trúc đứt quãng của luồng mùi trong nghiên cứu robot khứu giác. Cùng họ mô hình đó được dùng trong bộ mô phỏng GADEN công bố trên \textit{Sensors} năm 2017 \cite{r4}.
 
-\begin{ghichu}
-Một chi tiết kỹ thuật nhỏ nhưng quyết định tính đúng đắn: số ngẫu nhiên biểu diễn rối loạn được nhân với \textbf{căn bậc hai của bước thời gian}, chứ không nhân với bước thời gian. Đó là quy luật đúng của một bước đi ngẫu nhiên. Nếu làm sai, kết quả mô phỏng sẽ \textbf{phụ thuộc vào việc chọn bước thời gian bao nhiêu} - và khi đó mọi con số đều mất ý nghĩa.
-\end{ghichu}
-
 \subsubsection{Mô hình cảm biến}
 Nồng độ tính được ở trên là một đại lượng toán học, chưa phải cái mà vi điều khiển đọc được. Nó được đưa qua một mô hình cảm biến ba tầng:
 
@@ -78,10 +74,6 @@ Mô hình xe gồm toạ độ, hướng, tốc độ chạy 18 cm/s và tốc �
     \bottomrule
   \end{tabular}
 \end{table}
-\begin{ghichu}
-\textbf{Giới hạn phải nói rõ:} mọi tham số trong Bảng 5.1 là \textbf{giả định của nhóm}. Chúng được chọn để tạo ra một trường nồng độ có dạng hình học và động học hợp lý, đủ để so sánh \textbf{hành vi} của ba thuật toán. Chúng \textbf{không phải} số liệu đo được từ thực địa. Vì vậy kết quả mô phỏng được trình bày ở một chương riêng và không được trộn lẫn với số liệu thực nghiệm.
-\end{ghichu}
-
 \subsection{Vòng lặp mô phỏng}
 Mỗi 20 mili-giây, chương trình thực hiện đúng chuỗi việc sau: cập nhật vị trí tất cả các đám khí $\rightarrow$ tính nồng độ tại đầu cảm biến theo \textbf{vị trí thật} của xe $\rightarrow$ cho qua mô hình cảm biến để ra con số ADC $\rightarrow$ \textbf{đưa con số đó cho thuật toán} $\rightarrow$ thuật toán ra lệnh cho động cơ $\rightarrow$ cập nhật vị trí xe và cộng thêm sai số odometry. Rồi lặp lại.
 
@@ -123,7 +115,3 @@ Bảng 5.2 tóm tắt toàn bộ thiết kế thí nghiệm. \textbf{Tiêu chí 
 \textbf{Mô phỏng chứng minh được:} ba thuật toán, khi chạy trên \textbf{cùng một trường khí, cùng một mô hình cảm biến, cùng một bộ hạt giống và cùng một cách chấm điểm}, cho ra thứ hạng như thế nào. Vì mọi yếu tố khác đều giống hệt nhau, phần chênh lệch quan sát được chỉ có thể quy cho bản thân thuật toán.
 
 \textbf{Mô phỏng không chứng minh được:} các con số tuyệt đối. Nhóm \textbf{không} khẳng định rằng ngoài thực tế surge-casting sẽ thành công 57 \%. Bộ tham số của mô hình được chọn để tạo ra một trường có động học hợp lý, không phải đo từ thực địa.
-
-\begin{ghichu}
-\textbf{Phản biện đã lường trước:} ``Các em tự chọn tham số thì có phải cứ chỉnh tham số là ra kết quả mình muốn không?'' Cách phòng vệ đúng cho câu hỏi này là \textbf{phân tích độ nhạy}: thay đổi tốc độ gió, chu kỳ nhả khí và hằng số thời gian cảm biến trong khoảng $\pm$50 \%, rồi kiểm tra xem \textbf{thứ hạng ba thuật toán có đảo không}. Nếu thứ hạng giữ nguyên trên cả dải tham số thì kết luận không phụ thuộc vào bộ tham số cụ thể. Nhóm ghi nhận đây là phần \textbf{chưa hoàn thành}, và xếp nó vào hướng phát triển ở mục 7.3.
-\end{ghichu}

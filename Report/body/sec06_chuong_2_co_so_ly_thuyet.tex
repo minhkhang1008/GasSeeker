@@ -131,10 +131,6 @@ Bổ sung thêm hai lý do kỹ thuật. Thứ nhất, hai con MQ-3 cùng lô c�
 
 Vì vậy, ràng buộc một cảm biến \textbf{không phải là một hạn chế đành chấp nhận}. Nó chính là tiền đề tạo ra bài toán: khi không đo được chênh lệch không gian tức thời, robot buộc phải dùng \textbf{thời gian, chuyển động và thông tin về hướng gió} để thay thế. Đó là toàn bộ nội dung của phần thuật toán.
 
-\begin{ghichu}
-Một phản biện thường gặp: côn trùng có hai râu mà vẫn định hướng được. Đúng, nhưng tỉ lệ giữa khoảng cách hai râu và kích thước sợi khí ở gần nguồn lớn hơn nhiều so với tỉ lệ tương ứng trên xe của nhóm. Quan trọng hơn, các nghiên cứu về bướm đêm cho thấy chúng \textbf{không} bay theo chênh lệch nồng độ giữa hai râu, mà bay ngược hướng gió khi ngửi thấy và quét ngang khi mất mùi. Nghĩa là ngay cả sinh vật có hai bộ cảm biến cũng chọn dùng thông tin gió thay vì chênh lệch không gian. Đó chính là surge-casting.
-\end{ghichu}
-
 \subsection{Ba thuật toán tìm nguồn - nguyên lý}
 
 \subsubsection{Quét toàn bộ theo lưới}
@@ -150,10 +146,6 @@ Giả định đó đúng trong không khí tĩnh, khi khí lan chủ yếu bằ
 
 Lý do thứ hai đáng được nói kỹ, vì nó tác động trực tiếp lên thao tác quan trọng nhất của thuật toán này: \textbf{quét ba hướng rồi chọn hướng cao nhất}. Ba phép đo ấy diễn ra \textbf{tuần tự} - đo hướng thứ nhất, quay xe, đo hướng thứ hai, quay xe, đo hướng thứ ba - nên mỗi phép đo chỉ cách phép đo trước vài giây, ngắn hơn thời gian hồi phục của cảm biến. Hệ quả: phép đo sau còn mang dư âm của phép đo trước. Nếu hướng đo đầu tiên tình cờ gặp một cụm khí đậm, cái đuôi của nó sẽ cộng thêm vào hai hướng đo sau. Khi đó ba con số \textbf{xếp theo thứ tự đo chứ không xếp theo vị trí}, và thuật toán - vốn tưởng mình đang so sánh ba chỗ trong không gian - thực ra đang so sánh ba thời điểm.
 
-\begin{ghichu}
-Có thể phát biểu gọn: bám gradient không hỏng vì tín hiệu biến mất, mà hỏng vì \textbf{cảm biến chưa kịp quên chỗ vừa đo thì đã phải đo chỗ tiếp theo}. Nhóm chưa đo được hiện tượng này trên xe thật; lập luận trên là suy luận từ hai đặc tính đã được công bố trong \cite{r1,r3}, và kết quả mô phỏng ở Chương 6 phù hợp với suy luận đó nhưng không thay thế được bằng chứng thực nghiệm.
-\end{ghichu}
-
 \subsubsection{Surge-casting}
 Surge-casting bắt nguồn từ quan sát con bướm đêm đực tìm con cái trong đêm, qua khoảng cách hàng chục mét, trong không khí hoàn toàn rối. Nó \textbf{không so sánh nồng độ}. Nó chỉ làm hai việc:
 
@@ -166,10 +158,6 @@ Surge-casting bắt nguồn từ quan sát con bướm đêm đực tìm con cá
 Surge-casting thay một câu hỏi khó - \textit{``nồng độ đang tăng hay giảm?''} - bằng hai câu hỏi dễ: \textit{``còn ngửi thấy hay không?''} và \textit{``gió đang thổi từ đâu tới?''}. Câu thứ nhất chỉ cần một ngưỡng, không cần biết nồng độ chính xác, nên \textbf{mọi sai số ppm trình bày ở mục 2.2.3 đều không chạm tới nó}. Câu thứ hai là một đại lượng bền vững: gió có thể rối, nhưng hướng trung bình của nó vẫn ổn định.
 
 Và quan trọng nhất: \textbf{mất tín hiệu không còn là thất bại}. Trong bám gradient, đọc được giá trị bằng không là bế tắc. Trong surge-casting, đọc được giá trị bằng không là một \textbf{lệnh} - lệnh chuyển sang quét ngang. Chính sự đứt quãng của luồng khí, thứ làm hỏng bám gradient, được surge-casting dùng làm tín hiệu điều khiển.
-
-\begin{ghichu}
-Một hiểu nhầm phổ biến cần làm rõ: surge-casting \textbf{không} đòi hỏi dòng chảy tầng. Nó sinh ra chính là để dùng cho luồng khí rối và đứt quãng - con bướm đêm làm việc này trong không khí rối hoàn toàn, và các nghiên cứu mô phỏng lại hành vi đó, chẳng hạn nghiên cứu trên \textit{PLOS ONE} năm 2018 về thuật toán bướm đêm trong luồng khí rối từ nguồn phát ngắt quãng \cite{r6}, đều đặt trong môi trường rối. Thứ surge-casting cần không phải là dòng chảy trơn mà là \textbf{một hướng gió xác định được}. Cái làm nó hỏng là \textbf{không có gió}, hoặc gió quẩn không có hướng trung bình rõ ràng.
-\end{ghichu}
 
 \subsection{Định vị bằng dead reckoning}
 Robot không có hệ định vị tuyệt đối. Trong hầm kỹ thuật, cống hay bồn chứa - chính là các môi trường mục tiêu của đề tài - tín hiệu vệ tinh không tới được, nên phương án định vị vệ tinh bị loại ngay từ đầu. Robot vì vậy dùng \textbf{dead reckoning}: ước lượng vị trí hiện tại bằng cách cộng dồn quãng đường và góc quay kể từ điểm xuất phát.
