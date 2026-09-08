@@ -1,0 +1,79 @@
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[line width=4pt, gre]
+    ($(current page.north west)+(1.7cm,-1.7cm)$)
+    rectangle
+    ($(current page.south east)+(-1.7cm,1.7cm)$);
+
+  \begin{scope}[shift={(current page.north west)}]
+    \draw[line width=2pt]
+      (1.5cm,-1.5cm) -- (2cm,-1.5cm)
+      (1.5cm,-1.5cm) -- (1.5cm,-2cm);
+  \end{scope}
+  \begin{scope}[shift={(current page.north east)}]
+    \draw[line width=2pt]
+      (-1.5cm,-1.5cm) -- (-2cm,-1.5cm)
+      (-1.5cm,-1.5cm) -- (-1.5cm,-2cm);
+  \end{scope}
+  \begin{scope}[shift={(current page.south west)}]
+    \draw[line width=2pt]
+      (1.5cm,1.5cm) -- (2cm,1.5cm)
+      (1.5cm,1.5cm) -- (1.5cm,2cm);
+  \end{scope}
+  \begin{scope}[shift={(current page.south east)}]
+    \draw[line width=2pt]
+      (-1.5cm,1.5cm) -- (-2cm,1.5cm)
+      (-1.5cm,1.5cm) -- (-1.5cm,2cm);
+  \end{scope}
+\end{tikzpicture}
+
+\begin{center}
+\setlength{\parskip}{0pt}
+
+{\fontsize{15}{18}\selectfont
+\textbf{CÂU LẠC BỘ PAY IT FORWARD}\\[0.25cm]
+\textbf{CHƯƠNG TRÌNH PIFKID 2026}\\[0.45cm]
+}
+
+\includegraphics[width=2.6cm,trim=160 90 160 70,clip]{pic/bklogo.png}\\[0.55cm]
+
+\IfFileExists{pic/logo.png}{%
+  \includegraphics[width=6cm]{pic/logo.png}\\[0.9cm]
+}{%
+  \vspace{0.4cm}
+}
+
+{\fontsize{18}{22}\selectfont
+\textbf{BÁO CÁO TỔNG KẾT}\\[0.9cm]
+}
+
+{\fontsize{14}{17}\selectfont \textbf{\textit{ĐỀ TÀI}}\\[0.35cm]}
+
+\hspace{0.5cm}\rule{13cm}{0.6pt}\\[10pt]
+{\bfseries\color{gre}\LARGE GASSEEKER}\\[10pt]
+{\bfseries\color{gre}\large
+ROBOT TỰ HÀNH PHÁT HIỆN VÀ ĐỊNH VỊ\\[3pt]
+NGUỒN KHÍ BẤT THƯỜNG TRONG SỰ CỐ RÒ RỈ KHÍ}\\[10pt]
+\hspace{0.5cm}\rule{13cm}{0.6pt}\\[8pt]
+
+{\itshape\small So sánh có kiểm soát ba thuật toán tìm nguồn\\
+trên cùng một nền tảng phần cứng ràng buộc một cảm biến}\\[1.4cm]
+
+{\fontsize{13}{18}\selectfont
+\begin{tabular}{rl}
+\textbf{Nhóm:} & 14 \\
+\textbf{Trưởng nhóm:} & Nguyễn Hoàng Minh Khang \\
+\textbf{Thành viên:} & Bùi Nguyễn An Khang \\
+                     & Dương Minh Trí \\[0.35cm]
+\textbf{Người hỗ trợ:} & Ông Gia Huy \\
+                          & Trịnh Quang Huy \\
+                          & Bùi Mạnh Hoàng \\
+\end{tabular}
+}
+
+\vfill
+{\fontsize{12}{14}\selectfont
+TP. HỒ CHÍ MINH -- 2026
+}
+\end{center}

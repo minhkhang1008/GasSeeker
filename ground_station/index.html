@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GasSeeker Ground Station</title>
+<style>
+:root{color-scheme:dark;--bg:#08111a;--panel:#0f1b27;--panel2:#132334;--line:#26394b;--text:#ecf5fb;--muted:#8fa8bb;--accent:#49d7ff;--ok:#66e39a;--warn:#ffd166;--bad:#ff6b6b;--critical:#ff3d81}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 0%,#10283a 0,#08111a 42%);font:14px/1.4 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
+button,select{font:inherit}.shell{max-width:1500px;margin:auto;padding:18px}.topbar{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:14px}.brand h1{font-size:22px;margin:0;letter-spacing:.04em}.brand p{margin:3px 0 0;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#142434;color:var(--text);padding:9px 12px;border-radius:10px;cursor:pointer}.btn:hover{filter:brightness(1.15)}.btn.primary{border-color:#2d8198;background:#123d49}.btn.danger{border-color:#863d49;background:#431d25}.statuspill{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#0d1822}.dot{width:8px;height:8px;border-radius:50%;background:#667}.dot.live{background:var(--ok);box-shadow:0 0 12px var(--ok)}.dot.demo{background:var(--warn);box-shadow:0 0 12px var(--warn)}
+.grid{display:grid;grid-template-columns:minmax(520px,1.55fr) minmax(360px,.9fr);gap:14px}.stack{display:grid;gap:14px}.card{background:linear-gradient(180deg,rgba(19,35,52,.96),rgba(12,23,34,.96));border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.22);overflow:hidden}.card h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0;color:#b8cad8}.head{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border-bottom:1px solid var(--line)}.body{padding:14px}.arenaWrap{position:relative;aspect-ratio:1/1;max-height:68vh;margin:auto}.arena{width:100%;height:100%;display:block;background:#071019;border-radius:12px}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}.sw{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:5px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.metric{background:#0a1621;border:1px solid #203446;border-radius:12px;padding:10px}.metric .k{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em}.metric .v{font-size:19px;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric .u{font-size:11px;color:var(--muted);margin-left:3px}.wide{grid-column:span 2}.chart{width:100%;height:180px;display:block;background:#08131d;border-radius:10px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}.controls .btn{width:100%}.controls select{width:100%;background:#0b1823;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px}.log{height:160px;overflow:auto;background:#071019;border:1px solid #1d3041;border-radius:10px;padding:9px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#adc0cd}.health{display:grid;grid-template-columns:1fr 1fr;gap:9px}.healthItem{padding:9px;border-radius:10px;background:#0a1621;border:1px solid #203446}.healthItem b{display:block;font-size:18px}.healthItem span{color:var(--muted);font-size:11px}.footnote{font-size:11px;color:var(--muted);margin-top:8px}.alarm{font-weight:700}.SAFE{color:var(--ok)}.DETECTED{color:var(--warn)}.HIGH{color:#ff9f43}.CRITICAL{color:var(--critical)}
+@media(max-width:980px){.grid{grid-template-columns:1fr}.arenaWrap{max-height:none}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="brand"><h1>GASSEEKER // GROUND STATION</h1><p>LoRa telemetry · trajectory · gas field · mission control</p></div>
+    <div class="actions">
+      <span class="statuspill"><span id="statusDot" class="dot"></span><span id="statusText">DISCONNECTED</span></span>
+      <button id="connectBtn" class="btn primary">Kết nối USB</button>
+      <button id="demoBtn" class="btn">Demo Mode</button>
+      <button id="exportBtn" class="btn">Xuất CSV</button>
+      <button id="resetBtn" class="btn">Reset phiên</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="stack">
+      <section class="card">
+        <div class="head"><h2>Sa bàn 2 m × 2 m</h2><span id="missionBadge" class="statuspill">READY</span></div>
+        <div class="body">
+          <div class="arenaWrap"><canvas id="arena" class="arena" width="900" height="900"></canvas></div>
+          <div class="legend"><span><i class="sw" style="background:#49d7ff"></i>quỹ đạo</span><span><i class="sw" style="background:#ffd166"></i>robot</span><span><i class="sw" style="background:#ff3d81"></i>điểm tín hiệu mạnh</span><span>ô lưới: 25 cm</span></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="head"><h2>Tín hiệu khí theo thời gian</h2><span id="sampleCount">0 samples</span></div>
+        <div class="body"><canvas id="chart" class="chart" width="1000" height="210"></canvas></div>
+      </section>
+    </div>
+
+    <div class="stack">
+      <section class="card">
+        <div class="head"><h2>Telemetry realtime</h2><span id="alarm" class="alarm SAFE">SAFE</span></div>
+        <div class="body metrics">
+          <div class="metric wide"><div class="k">Thuật toán</div><div id="algo" class="v">—</div></div>
+          <div class="metric wide"><div class="k">Trạng thái</div><div id="state" class="v">—</div></div>
+          <div class="metric"><div class="k">ADC</div><div id="adc" class="v">—</div></div>
+          <div class="metric"><div class="k">Δ tín hiệu</div><div id="norm" class="v">—</div></div>
+          <div class="metric"><div class="k">ppm ~</div><div id="ppm" class="v">—</div></div>
+          <div class="metric"><div class="k">Quãng đường</div><div id="dist" class="v">—<span class="u">cm</span></div></div>
+          <div class="metric"><div class="k">X</div><div id="x" class="v">—<span class="u">cm</span></div></div>
+          <div class="metric"><div class="k">Y</div><div id="y" class="v">—<span class="u">cm</span></div></div>
+          <div class="metric"><div class="k">Heading</div><div id="head" class="v">—<span class="u">°</span></div></div>
+          <div class="metric"><div class="k">Best Δ</div><div id="best" class="v">—</div></div>
+          <div class="metric"><div class="k">RSSI</div><div id="rssi" class="v">—<span class="u">dBm</span></div></div>
+          <div class="metric"><div class="k">SNR</div><div id="snr" class="v">—<span class="u">dB</span></div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><h2>Mission control</h2><span>uplink LoRa</span></div>
+        <div class="body">
+          <div class="controls">
+            <button class="btn primary" data-cmd="start">START</button>
+            <button class="btn danger" data-cmd="stop">E-STOP / STOP</button>
+            <select id="algoSelect"><option value="0">Quét toàn bộ</option><option value="1" selected>Bám gradient</option><option value="2">Surge-casting</option></select>
+            <button id="setAlgo" class="btn">Đổi thuật toán</button>
+            <button class="btn" data-cmd="cal">Đo lại baseline</button>
+            <button class="btn" data-cmd="info">Yêu cầu info</button>
+          </div>
+          <div class="footnote">Robot vẫn tự hành độc lập. Các nút chỉ gửi lệnh qua trạm ESP32; mất Ground Station không làm dừng logic tìm nguồn trên xe.</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><h2>Link health</h2><span id="lastSeen">chưa có gói</span></div>
+        <div class="body health">
+          <div class="healthItem"><b id="goodPackets">0</b><span>gói hợp lệ</span></div>
+          <div class="healthItem"><b id="badPackets">0</b><span>gói lỗi/bỏ qua</span></div>
+          <div class="healthItem"><b id="rate">0.0 Hz</b><span>tốc độ telemetry</span></div>
+          <div class="healthItem"><b id="mode">—</b><span>nguồn dữ liệu</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><h2>Console</h2><button id="clearLog" class="btn">Clear</button></div>
+        <div class="body"><div id="log" class="log"></div></div>
+      </section>
+    </div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const ARENA=200, GRID=25;
+let port=null, reader=null, writer=null, demoTimer=null, demoT=0, good=0,bad=0;
+let samples=[], heat=[], sessionStart=performance.now(), lastPacketAt=0, packetTimes=[];
+let current={};
+const cols=['t_s','algo','state','adc','norm','ppm','level','x_cm','y_cm','head_deg','dist_cm','cell_x','cell_y','best_norm','finished','rssi','snr'];
+function log(msg){const el=$('log');const t=new Date().toLocaleTimeString();el.textContent+=`[${t}] ${msg}\n`;el.scrollTop=el.scrollHeight}
+function setMode(mode){$('mode').textContent=mode;$('statusDot').className='dot '+(mode==='USB'?'live':mode==='DEMO'?'demo':'');$('statusText').textContent=mode==='USB'?'LIVE · USB/LoRa':mode==='DEMO'?'DEMO · SYNTHETIC':'DISCONNECTED'}
+function checksumOk(pkt){if(!pkt.startsWith('$')||!pkt.includes('*'))return false;const star=pkt.lastIndexOf('*');let c=0;for(const ch of pkt.slice(1,star))c^=ch.charCodeAt(0);return c===parseInt(pkt.slice(star+1,star+3),16)}
+function parseLine(raw){let line=raw.trim(),rssi='',snr='';if(!line)return null;if(line.startsWith('RX,')){const p=line.split(',',4);if(p.length<4)return null;rssi=p[1];snr=p[2];line=p[3]}if(!line.startsWith('$GS,')){log(raw.trim());return null}if(!checksumOk(line)){bad++;updateHealth();log('Bỏ gói: checksum không hợp lệ');return null}const body=line.slice(1,line.lastIndexOf('*')).split(',');if(body.length<16){bad++;updateHealth();return null}const f=body.slice(1);return {t_s:+f[0],algo:f[1],state:f[2],adc:+f[3],norm:+f[4],ppm:+f[5],level:f[6],x_cm:+f[7],y_cm:+f[8],head_deg:+f[9],dist_cm:+f[10],cell_x:+f[11],cell_y:+f[12],best_norm:+f[13],finished:+f[14],rssi:rssi===''?null:+rssi,snr:snr===''?null:+snr,raw:line}}
+function ingest(s){good++;current=s;samples.push(s);heat.push({x:s.x_cm,y:s.y_cm,v:s.norm});if(samples.length>1500)samples.shift();if(heat.length>1200)heat.shift();lastPacketAt=Date.now();packetTimes.push(performance.now());packetTimes=packetTimes.filter(t=>performance.now()-t<5000);updateTelemetry();updateHealth();drawArena();drawChart()}
+function updateTelemetry(){const s=current;for(const [id,key] of [['algo','algo'],['state','state'],['adc','adc'],['norm','norm'],['ppm','ppm'],['dist','dist_cm'],['x','x_cm'],['y','y_cm'],['head','head_deg'],['best','best_norm'],['rssi','rssi'],['snr','snr']])$(id).childNodes[0].nodeValue=(s[key]===null||s[key]===undefined)?'—':(typeof s[key]==='number'&&['ppm','dist','x','y','head','rssi','snr'].includes(id)?s[key].toFixed(1):s[key]);$('alarm').textContent=s.level||'—';$('alarm').className='alarm '+(s.level||'');$('missionBadge').textContent=s.finished?'DONE':s.state||'RUN';$('sampleCount').textContent=`${samples.length} samples`}
+function updateHealth(){$('goodPackets').textContent=good;$('badPackets').textContent=bad;$('rate').textContent=(packetTimes.length/5).toFixed(1)+' Hz';$('lastSeen').textContent=lastPacketAt?`${Math.max(0,(Date.now()-lastPacketAt)/1000).toFixed(1)} s trước`:'chưa có gói'}
+setInterval(updateHealth,500);
+function drawArena(){const c=$('arena'),x=c.getContext('2d'),W=c.width,H=c.height,pad=55,sz=Math.min(W,H)-2*pad,sc=sz/ARENA;x.clearRect(0,0,W,H);x.fillStyle='#071019';x.fillRect(0,0,W,H);x.strokeStyle='#1d3447';x.lineWidth=1;for(let g=0;g<=ARENA;g+=GRID){const p=pad+g*sc;x.beginPath();x.moveTo(p,pad);x.lineTo(p,pad+sz);x.stroke();x.beginPath();x.moveTo(pad,pad+sz-g*sc);x.lineTo(pad+sz,pad+sz-g*sc);x.stroke()}x.fillStyle='#7690a2';x.font='20px system-ui';x.fillText('0',pad-28,pad+sz+30);x.fillText('200 cm',pad+sz-70,pad+sz+30);
+const vals=heat.map(p=>p.v).filter(Number.isFinite);const max=Math.max(80,...vals);for(const p of heat){const px=pad+p.x*sc,py=pad+sz-p.y*sc,a=Math.max(0,Math.min(1,p.v/max));if(a<=0)continue;const r=32+45*a;const gr=x.createRadialGradient(px,py,0,px,py,r);gr.addColorStop(0,`rgba(255,61,129,${.18+.42*a})`);gr.addColorStop(1,'rgba(255,61,129,0)');x.fillStyle=gr;x.fillRect(px-r,py-r,r*2,r*2)}
+if(samples.length>1){x.strokeStyle='#49d7ff';x.lineWidth=4;x.beginPath();samples.forEach((p,i)=>{const px=pad+p.x_cm*sc,py=pad+sz-p.y_cm*sc;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}
+if(samples.length){const b=samples.reduce((m,p)=>p.norm>m.norm?p:m,samples[0]);x.fillStyle='#ff3d81';x.beginPath();x.arc(pad+b.x_cm*sc,pad+sz-b.y_cm*sc,10,0,Math.PI*2);x.fill();const s=samples[samples.length-1],px=pad+s.x_cm*sc,py=pad+sz-s.y_cm*sc,ang=-s.head_deg*Math.PI/180;x.save();x.translate(px,py);x.rotate(ang);x.fillStyle='#ffd166';x.beginPath();x.moveTo(18,0);x.lineTo(-12,-10);x.lineTo(-7,0);x.lineTo(-12,10);x.closePath();x.fill();x.restore()}}
+function drawChart(){const c=$('chart'),x=c.getContext('2d'),W=c.width,H=c.height,pad=35;x.clearRect(0,0,W,H);x.fillStyle='#08131d';x.fillRect(0,0,W,H);const a=samples.slice(-180);if(a.length<2)return;const vals=a.map(s=>s.norm),min=Math.min(0,...vals),max=Math.max(100,...vals),span=max-min||1;x.strokeStyle='#26394b';x.beginPath();x.moveTo(pad,H-pad);x.lineTo(W-pad,H-pad);x.stroke();x.beginPath();x.moveTo(pad,pad);x.lineTo(pad,H-pad);x.stroke();x.strokeStyle='#49d7ff';x.lineWidth=3;x.beginPath();a.forEach((s,i)=>{const px=pad+i*(W-2*pad)/(a.length-1),py=H-pad-(s.norm-min)*(H-2*pad)/span;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke();x.fillStyle='#8fa8bb';x.font='16px system-ui';x.fillText(`ΔADC ${Math.round(max)}`,4,pad+5);x.fillText(`${Math.round(min)}`,8,H-pad)}
+async function connect(){if(!('serial'in navigator)){alert('Web Serial cần Chrome/Edge trên desktop và trang chạy từ localhost hoặc HTTPS.');return}if(port){await disconnect();return}stopDemo();try{port=await navigator.serial.requestPort();await port.open({baudRate:115200});writer=port.writable.getWriter();setMode('USB');$('connectBtn').textContent='Ngắt USB';log('Đã mở cổng Serial 115200 baud');readLoop()}catch(e){log('Kết nối thất bại: '+e.message);port=null;setMode('') }}
+async function disconnect(){try{if(reader){await reader.cancel();reader.releaseLock();reader=null}if(writer){writer.releaseLock();writer=null}if(port){await port.close();port=null}}catch(e){}$('connectBtn').textContent='Kết nối USB';setMode('');log('Đã ngắt USB')}
+async function readLoop(){const dec=new TextDecoder();let buf='';try{reader=port.readable.getReader();while(port){const {value,done}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});let i;while((i=buf.indexOf('\n'))>=0){const line=buf.slice(0,i).replace(/\r$/,'');buf=buf.slice(i+1);const s=parseLine(line);if(s)ingest(s)}}}catch(e){log('Serial read: '+e.message)}finally{if(reader){try{reader.releaseLock()}catch(e){}reader=null}}
+}
+async function sendCommand(cmd){if(demoTimer){log('[DEMO] command: '+cmd);if(cmd==='stop')$('missionBadge').textContent='STOPPED';return}if(!writer){log('Chưa kết nối trạm thu USB');return}try{await writer.write(new TextEncoder().encode(cmd+'\n'));log('TX → '+cmd)}catch(e){log('TX lỗi: '+e.message)}}
+function xorPacket(fields){const body='GS,'+fields.join(',');let c=0;for(const ch of body)c^=ch.charCodeAt(0);return '$'+body+'*'+c.toString(16).toUpperCase().padStart(2,'0')}
+function startDemo(){if(demoTimer){stopDemo();return}disconnect();resetSession();setMode('DEMO');$('demoBtn').textContent='Dừng Demo';demoT=0;log('Demo Mode: dữ liệu mô phỏng, không phải kết quả thực nghiệm.');demoTimer=setInterval(()=>{demoT+=.5;const u=Math.min(1,demoT/48),theta=u*Math.PI*3.2,r=75*(1-u*.75),sx=112,sy=128;let x=Math.max(8,Math.min(192,sx+r*Math.cos(theta))),y=Math.max(8,Math.min(192,sy+r*Math.sin(theta)));const d=Math.hypot(x-sx,y-sy),norm=Math.round(40+900*Math.exp(-d/38)+55*Math.sin(demoT*1.8));const ppm=Math.max(0,norm*1.8);const level=norm>760?'CRITICAL':norm>480?'HIGH':norm>180?'DETECTED':'SAFE';const state=demoT<5?'SEEKING':demoT<36?'CLIMB':'RETURN';const dist=demoT*13;const fields=[demoT.toFixed(1),'GRD',state,Math.round(520+norm),norm,ppm.toFixed(0),level,x.toFixed(1),y.toFixed(1),((theta*180/Math.PI+360)%360).toFixed(1),dist.toFixed(0),Math.floor(x/25),Math.floor(y/25),Math.max(norm,...samples.map(s=>s.best_norm||0)),demoT>48?1:0];const raw='RX,'+(-62-8*Math.sin(demoT/5)).toFixed(1)+','+(8+2*Math.cos(demoT/4)).toFixed(1)+','+xorPacket(fields);const s=parseLine(raw);if(s)ingest(s);if(demoT>50)demoT=0},500)}
+function stopDemo(){if(demoTimer){clearInterval(demoTimer);demoTimer=null;$('demoBtn').textContent='Demo Mode';setMode('');log('Đã dừng Demo Mode')}}
+function exportCsv(){if(!samples.length){log('Chưa có sample để xuất');return}const out=[cols.join(',')];for(const s of samples)out.push(cols.map(k=>s[k]??'').join(','));const blob=new Blob([out.join('\n')+'\n'],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`gasseeker_${new Date().toISOString().replace(/[:.]/g,'-')}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);log('Đã xuất CSV phiên hiện tại')}
+function resetSession(){samples=[];heat=[];good=bad=0;packetTimes=[];current={};sessionStart=performance.now();['algo','state','adc','norm','ppm','dist','x','y','head','best','rssi','snr'].forEach(id=>$(id).childNodes[0].nodeValue='—');$('alarm').textContent='SAFE';$('alarm').className='alarm SAFE';updateHealth();drawArena();drawChart();log('Reset phiên hiển thị')}
+$('connectBtn').onclick=connect;$('demoBtn').onclick=startDemo;$('exportBtn').onclick=exportCsv;$('resetBtn').onclick=resetSession;$('clearLog').onclick=()=> $('log').textContent='';document.querySelectorAll('[data-cmd]').forEach(b=>b.onclick=()=>sendCommand(b.dataset.cmd));$('setAlgo').onclick=()=>sendCommand('algo '+$('algoSelect').value);drawArena();drawChart();setMode('');log('Ground Station sẵn sàng. Kết nối USB hoặc bật Demo Mode.');
+</script>
+</body>
+</html>

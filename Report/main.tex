@@ -1,0 +1,255 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T5]{fontenc}
+  \usepackage[vietnamese]{babel}
+  \usepackage{mathptmx}
+\else
+  \usepackage{fontspec}
+  \IfFontExistsTF{Times New Roman}
+    {\setmainfont{Times New Roman}}
+    {\setmainfont{DejaVu Serif}}
+  \IfFontExistsTF{Courier New}
+    {\setmonofont{Courier New}[Scale=MatchLowercase]}
+    {\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]}
+\fi
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{titlesec}
+\usepackage{xurl}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[hidelinks]{hyperref}
+
+\geometry{top=2.5cm,bottom=2.5cm,left=2.5cm,right=2cm}
+
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.70}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
+\definecolor{gre}{RGB}{0, 71, 171}
+\definecolor{gree}{RGB}{173, 216, 230}
+\definecolor{notebg}{RGB}{246, 248, 251}
+\definecolor{quotebar}{RGB}{190, 190, 190}
+
+\renewcommand{\figurename}{Hình}
+\renewcommand{\tablename}{Bảng}
+\renewcommand{\contentsname}{MỤC LỤC}
+\renewcommand{\listfigurename}{DANH MỤC HÌNH VẼ}
+\renewcommand{\listtablename}{DANH MỤC BẢNG}
+\renewcommand{\refname}{TÀI LIỆU THAM KHẢO}
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\captionsetup{labelsep=period,font=small,labelfont=bf,justification=centering,
+              width=0.92\textwidth,skip=6pt}
+\captionsetup[table]{position=top}
+
+\titleformat{\section}[hang]
+  {\normalfont\large\bfseries\filcenter}{CHƯƠNG \thesection.}{0.6em}{}
+\titlespacing*{\section}{0pt}{0pt}{1.2em}
+\newcommand{\chuong}[1]{\clearpage\section{#1}}
+\titleformat{\subsection}[hang]
+  {\normalfont\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{1.3em}{0.6em}
+\titleformat{\subsubsection}[hang]
+  {\normalfont\normalsize\bfseries\itshape}{\thesubsubsection.}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{1.0em}{0.5em}
+
+\newcommand{\frontsection}[1]{%
+  \clearpage
+  \begin{center}\large\bfseries #1\end{center}
+  \vspace{0.6em}
+  \addcontentsline{toc}{section}{#1}%
+}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecfont}{\bfseries}
+\renewcommand{\cftsecpresnum}{CHƯƠNG }
+\renewcommand{\cftsecaftersnum}{.\hspace{0.3em}}
+\setlength{\cftsecnumwidth}{7.2em}
+\renewcommand{\cftsecpagefont}{\bfseries}
+\setlength{\cftbeforesecskip}{4pt}
+\renewcommand{\cftsubsecaftersnum}{.\hspace{0.3em}}
+\renewcommand{\cftsubsubsecaftersnum}{.\hspace{0.3em}}
+\setlength{\cftsubsecnumwidth}{3.2em}
+\setlength{\cftsubsubsecnumwidth}{4.2em}
+\renewcommand{\cftfigpresnum}{Hình }
+\renewcommand{\cfttabpresnum}{Bảng }
+\renewcommand{\cftfigaftersnum}{.\hspace{0.3em}}
+\renewcommand{\cfttabaftersnum}{.\hspace{0.3em}}
+\setlength{\cftfignumwidth}{5.5em}
+\setlength{\cfttabnumwidth}{5.5em}
+
+\renewcommand{\cfttoctitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftloftitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterloftitle}{\hfill}
+\renewcommand{\cftlottitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterlottitle}{\hfill}
+
+\newtcolorbox{ghichu}{%
+  enhanced, sharp corners,
+  colback=notebg, colframe=gre,
+  boxrule=0pt, leftrule=3.5pt, toprule=0pt, bottomrule=0pt, rightrule=0pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  before skip=10pt, after skip=10pt,
+}
+\newtcolorbox{trichdan}{%
+  enhanced, breakable, sharp corners,
+  colback=white, colframe=quotebar,
+  boxrule=0pt, leftrule=2.5pt, toprule=0pt, bottomrule=0pt, rightrule=0pt,
+  left=10pt, right=10pt, top=5pt, bottom=5pt,
+  fontupper=\itshape\small,
+  before skip=9pt, after skip=9pt,
+}
+
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.45em}
+\onehalfspacing
+\setlength{\emergencystretch}{3em}
+\sloppy
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\fancyhead[L]{\footnotesize\itshape GasSeeker - Robot dò tìm nguồn rò rỉ khí}
+\fancyhead[R]{\footnotesize\itshape Nhóm 14 · PIFKID 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+  \input{Khung}
+\end{titlepage}
+
+\pagenumbering{gobble}
+
+\clearpage
+\addtocontents{toc}{\protect\thispagestyle{fancy}}
+\tableofcontents
+
+\clearpage
+\addcontentsline{toc}{section}{DANH MỤC HÌNH VẼ}
+\listoffigures
+\thispagestyle{fancy}
+
+\clearpage
+\addcontentsline{toc}{section}{DANH MỤC BẢNG}
+\listoftables
+\thispagestyle{fancy}
+
+\frontsection{DANH MỤC TỪ VIẾT TẮT VÀ KÝ HIỆU}
+\input{body/sec04_danh_muc_tu_viet_tat_va_ky_hieu}
+
+\frontsection{DANH SÁCH THÀNH VIÊN VÀ NGƯỜI HỖ TRỢ}
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|c|p{5.2cm}|p{3.2cm}|p{4.4cm}|}
+\hline
+\textbf{STT} & \textbf{Họ và tên} & \textbf{Vai trò} & \textbf{Nội dung phụ trách} \\
+\hline
+1 & Nguyễn Hoàng Minh Khang & Trưởng nhóm & Kiến trúc hệ thống; phát triển phần mềm và thuật toán; biên soạn báo cáo, xây dựng sơ đồ kỹ thuật \\
+\hline
+2 & Bùi Nguyễn An Khang & Thành viên & Lắp ráp, đấu nối và tích hợp phần cứng \\
+\hline
+3 & Dương Minh Trí & Thành viên & Lắp ráp, đấu nối và tích hợp phần cứng \\
+\hline
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|c|p{5.2cm}|p{7.8cm}|}
+\hline
+\textbf{STT} & \textbf{Người hỗ trợ} & \textbf{Đơn vị} \\
+\hline
+1 & Ông Gia Huy & CLB Pay it Forward \\
+\hline
+2 & Trịnh Quang Huy & CLB Pay it Forward \\
+\hline
+3 & Bùi Mạnh Hoàng & CLB Pay it Forward \\
+\hline
+\end{tabular}
+\end{table}
+
+\frontsection{TÓM TẮT}
+\begingroup
+\small
+\setstretch{1.25}
+\input{body/sec02_tom_tat}
+\endgroup
+
+\clearpage
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\chuong{GIỚI THIỆU}
+\input{body/sec05_chuong_1_gioi_thieu}
+
+\chuong{CƠ SỞ LÝ THUYẾT}
+\input{body/sec06_chuong_2_co_so_ly_thuyet}
+
+\chuong{THIẾT KẾ PHẦN CỨNG}
+\input{body/sec07_chuong_3_thiet_ke_phan_cung}
+
+\chuong{THIẾT KẾ PHẦN MỀM}
+\input{body/sec08_chuong_4_thiet_ke_phan_mem}
+
+\chuong{MÔI TRƯỜNG MÔ PHỎNG VÀ THIẾT KẾ THÍ NGHIỆM}
+\input{body/sec09_chuong_5_moi_truong_mo_phong_va_thie}
+
+\chuong{KẾT QUẢ MÔ PHỎNG VÀ BÀN LUẬN}
+\input{body/sec10_chuong_6_ket_qua_va_ban_luan}
+
+\chuong{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
+\input{body/sec11_chuong_7_ket_luan_va_huong_phat_trie}
+
+\clearpage
+\addcontentsline{toc}{section}{TÀI LIỆU THAM KHẢO}
+\input{body/sec12_tai_lieu_tham_khao}
+
+\frontsection{PHỤ LỤC B. TIẾN ĐỘ THỰC HIỆN}
+\input{body/sec14_phu_luc_b_phan_cong_cong_viec}
+
+\frontsection{PHỤ LỤC C. QUY TRÌNH VẬN HÀNH VÀ HIỆU CHUẨN}
+\input{body/sec15_phu_luc_c_quy_trinh_van_hanh_va_hieu}
+
+\end{document}
